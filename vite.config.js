@@ -14,13 +14,5 @@ export default defineConfig({
     emptyOutDir: true, // Make sure directory is cleaned
     minify: true,      // Ensure proper minification
     sourcemap: false,  // Disable sourcemaps in production
-    rollupOptions: {
-      output: {
-        // Use custom hash from env var or generate random one
-        entryFileNames: `assets/[name].${process.env.BUILD_HASH || '[hash]'}.js`,
-        chunkFileNames: `assets/[name].${process.env.BUILD_HASH || '[hash]'}.js`,
-        assetFileNames: `assets/[name].${process.env.BUILD_HASH || '[hash]'}.[ext]`
-      }
-    }
   }
 })

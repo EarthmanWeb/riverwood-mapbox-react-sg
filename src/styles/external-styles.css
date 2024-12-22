@@ -1,0 +1,55 @@
+@import url('https://riverwood.earthman.ca/wp-content/themes/prismatic/public/assets/css/screen.css');
+@import url('https://riverwood.earthman.ca/wp-content/themes/riverwood-properties/public/assets/css/screen.css');
+
+/* Custom Properties */
+:root {
+  --riverwood-blue: #004274;
+}
+
+/* Site Header & Footer Backgrounds */
+.site-header,
+.site-footer {
+  background: var(--riverwood-blue);
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Site Intro Styling */
+.site-intro {
+  background: url(https://riverwood.earthman.ca/wp-content/uploads/2024/11/RIVERWOOD-LOGO.png);
+  background-size: cover !important;
+  box-sizing: border-box;
+  padding: 8rem 0;
+}
+
+.site-intro .intro-header-title {
+  color: #ffffff;
+  font-size: 3rem;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.site-intro .intro-header-description {
+  line-height: 1.8rem;
+  color: #ffffff;
+  margin: 0 auto;
+  max-width: 768px;
+  text-align: center;
+}
+
+/* Hide specific branding elements */
+.site-header .branding-navigation .site-branding .site-title a,
+.site-header .branding-navigation .site-branding .site-description {
+  display: none;
+}
+
+/* Background override */
+body.custom-background {
+  background-image: none;
+}
+
+/* Fix any potential box-model issues */
+* {
+  box-sizing: border-box;
+}
