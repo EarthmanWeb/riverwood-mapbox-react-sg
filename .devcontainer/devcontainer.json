@@ -6,8 +6,24 @@
             "extensions": [
                 "dbaeumer.vscode-eslint",
                 "esbenp.prettier-vscode",
-                "dsznajder.es7-react-js-snippets"
-            ]
+                "dsznajder.es7-react-js-snippets",
+                "redhat.vscode-yaml",
+                "esbenp.prettier-vscode",
+                "mrmlnc.vscode-scss",
+                "ms-vscode.vscode-typescript-language-features",
+                "shd101wyy.markdown-preview-enhanced",
+                "syler.sass-indented",
+                "eamodio.gitlens",
+                "mhutchie.git-graph",
+                "mikebovenlander.formate",
+                "thekalinga.bootstrap4-vscode",
+                "michelemelluso.code-beautifier",
+                "github.copilot",
+                "github.codespaces",
+                "satiromarra.code-sftp",
+                "glenn2223.live-sass",
+                "gitHub.vscode-github-actions"
+            ],
         }
     },
     "remoteUser": "node",
