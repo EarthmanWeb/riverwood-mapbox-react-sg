@@ -3,7 +3,7 @@
     {
       "id": "property-1",
       "title": "Old National Plaza",
-      "image": "https://picsum.photos/800/600",
+      "image": "https://picsum.photos/500/300.webp",
       "lat": "33.5847",
       "lng": "-84.4947",
       "display_address": "5245 Old National Hwy, College Park, GA 30349",
@@ -14,9 +14,9 @@
         "Property Brochure": "https://example.com/brochures/oldnational.pdf"
       },
       "images": {
-        "Exterior": "https://picsum.photos/800/600",
-        "Interior": "https://picsum.photos/800/600",
-        "Aerial": "https://picsum.photos/800/600"
+        "Exterior": "https://picsum.photos/500/300.webp",
+        "Interior": "https://picsum.photos/500/300.webp",
+        "Aerial": "https://picsum.photos/500/300.webp"
       },
       "city": "College Park",
       "state": "GA",
@@ -75,7 +75,7 @@
     {
       "id": "property-2",
       "title": "Charlotte Medical Center",
-      "image": "https://picsum.photos/800/600",
+      "image": "https://picsum.photos/500/300.webp",
       "lat": "35.2271",
       "lng": "-80.8431",
       "display_address": "1200 Medical Plaza Dr, Charlotte, NC 28262",
@@ -86,8 +86,8 @@
         "Leasing Info": "https://example.com/leasing/charlotte.pdf"
       },
       "images": {
-        "Building": "https://picsum.photos/800/600",
-        "Lobby": "https://picsum.photos/800/600"
+        "Building": "https://picsum.photos/500/300.webp",
+        "Lobby": "https://picsum.photos/500/300.webp"
       },
       "city": "Charlotte",
       "state": "NC",
@@ -138,7 +138,7 @@
     {
       "id": "property-3",
       "title": "Birmingham Distribution Center",
-      "image": "https://picsum.photos/800/600?random=3",
+      "image": "https://picsum.photos/500/300.webp?random=3",
       "lat": "33.5186",
       "lng": "-86.8104",
       "display_address": "2200 Industrial Blvd, Birmingham, AL 35204",
@@ -149,9 +149,9 @@
         "Site Layout": "https://example.com/layout/birmingham.pdf"
       },
       "images": {
-        "Warehouse": "https://picsum.photos/800/600?random=4",
-        "Loading Dock": "https://picsum.photos/800/600?random=5",
-        "Aerial": "https://picsum.photos/800/600?random=6"
+        "Warehouse": "https://picsum.photos/500/300.webp?random=4",
+        "Loading Dock": "https://picsum.photos/500/300.webp?random=5",
+        "Aerial": "https://picsum.photos/500/300.webp?random=6"
       },
       "city": "Birmingham",
       "state": "AL",
@@ -210,7 +210,7 @@
     {
       "id": "property-4",
       "title": "Lexington Restaurant Space",
-      "image": "https://picsum.photos/800/600?random=7",
+      "image": "https://picsum.photos/500/300.webp?random=7",
       "lat": "38.0406",
       "lng": "-84.5037",
       "display_address": "145 Main Street, Lexington, KY 40507",
@@ -221,9 +221,9 @@
         "Equipment List": "https://example.com/equipment/lexington.pdf"
       },
       "images": {
-        "Storefront": "https://picsum.photos/800/600?random=8",
-        "Kitchen": "https://picsum.photos/800/600?random=9",
-        "Dining Room": "https://picsum.photos/800/600?random=10"
+        "Storefront": "https://picsum.photos/500/300.webp?random=8",
+        "Kitchen": "https://picsum.photos/500/300.webp?random=9",
+        "Dining Room": "https://picsum.photos/500/300.webp?random=10"
       },
       "city": "Lexington",
       "state": "KY",
@@ -274,7 +274,7 @@
     {
       "id": "property-5",
       "title": "Columbia Medical Plaza",
-      "image": "https://picsum.photos/800/600?random=11",
+      "image": "https://picsum.photos/500/300.webp?random=11",
       "lat": "34.0007",
       "lng": "-81.0348",
       "display_address": "2750 Laurel Street, Columbia, SC 29204",
@@ -285,9 +285,9 @@
         "Parking Map": "https://example.com/parking/columbia.pdf"
       },
       "images": {
-        "Building": "https://picsum.photos/800/600?random=12",
-        "Reception": "https://picsum.photos/800/600?random=13",
-        "Suite Interior": "https://picsum.photos/800/600?random=14"
+        "Building": "https://picsum.photos/500/300.webp?random=12",
+        "Reception": "https://picsum.photos/500/300.webp?random=13",
+        "Suite Interior": "https://picsum.photos/500/300.webp?random=14"
       },
       "city": "Columbia",
       "state": "SC",
@@ -346,7 +346,7 @@
     {
       "id": "property-6",
       "title": "Savannah Retail Center",
-      "image": "https://picsum.photos/800/600?random=15",
+      "image": "https://picsum.photos/500/300.webp?random=15",
       "lat": "32.0809",
       "lng": "-81.0912",
       "display_address": "7805 Abercorn Street, Savannah, GA 31406",
@@ -357,9 +357,9 @@
         "Traffic Study": "https://example.com/traffic/savannah.pdf"
       },
       "images": {
-        "Center": "https://picsum.photos/800/600?random=16",
-        "Storefront": "https://picsum.photos/800/600?random=17",
-        "Parking": "https://picsum.photos/800/600?random=18"
+        "Center": "https://picsum.photos/500/300.webp?random=16",
+        "Storefront": "https://picsum.photos/500/300.webp?random=17",
+        "Parking": "https://picsum.photos/500/300.webp?random=18"
       },
       "city": "Savannah",
       "state": "GA",
@@ -418,7 +418,7 @@
     {
       "id": "property-7",
       "title": "Huntsville Tech Park",
-      "image": "https://picsum.photos/800/600?random=19",
+      "image": "https://picsum.photos/500/300.webp?random=19",
       "lat": "34.7304",
       "lng": "-86.5861",
       "display_address": "3325 Research Park Blvd, Huntsville, AL 35806",
@@ -429,9 +429,9 @@
         "Area Overview": "https://example.com/overview/huntsville.pdf"
       },
       "images": {
-        "Building": "https://picsum.photos/800/600?random=20",
-        "Office Space": "https://picsum.photos/800/600?random=21",
-        "Conference Room": "https://picsum.photos/800/600?random=22"
+        "Building": "https://picsum.photos/500/300.webp?random=20",
+        "Office Space": "https://picsum.photos/500/300.webp?random=21",
+        "Conference Room": "https://picsum.photos/500/300.webp?random=22"
       },
       "city": "Huntsville",
       "state": "AL",
@@ -490,7 +490,7 @@
     {
       "id": "property-8",
       "title": "Raleigh Innovation Campus",
-      "image": "https://picsum.photos/800/600?random=23",
+      "image": "https://picsum.photos/500/300.webp?random=23",
       "lat": "35.7796",
       "lng": "-78.6382",
       "display_address": "2650 Research Drive, Raleigh, NC 27695",
@@ -502,9 +502,9 @@
         "Environmental Report": "https://example.com/env/raleigh.pdf"
       },
       "images": {
-        "Aerial": "https://picsum.photos/800/600?random=24",
-        "Lab Space": "https://picsum.photos/800/600?random=25",
-        "Collaboration Area": "https://picsum.photos/800/600?random=26"
+        "Aerial": "https://picsum.photos/500/300.webp?random=24",
+        "Lab Space": "https://picsum.photos/500/300.webp?random=25",
+        "Collaboration Area": "https://picsum.photos/500/300.webp?random=26"
       },
       "city": "Raleigh",
       "state": "NC",
@@ -563,7 +563,7 @@
     {
       "id": "property-9",
       "title": "Augusta Commerce Center",
-      "image": "https://picsum.photos/800/600?random=27",
+      "image": "https://picsum.photos/500/300.webp?random=27",
       "lat": "33.4735",
       "lng": "-82.0107",
       "display_address": "3520 Wrightboro Road, Augusta, GA 30909",
@@ -574,9 +574,9 @@
         "Site Plan": "https://example.com/plans/augusta-commerce.pdf"
       },
       "images": {
-        "Exterior": "https://picsum.photos/800/600?random=28",
-        "Lobby": "https://picsum.photos/800/600?random=29",
-        "Common Area": "https://picsum.photos/800/600?random=30"
+        "Exterior": "https://picsum.photos/500/300.webp?random=28",
+        "Lobby": "https://picsum.photos/500/300.webp?random=29",
+        "Common Area": "https://picsum.photos/500/300.webp?random=30"
       },
       "city": "Augusta",
       "state": "GA",

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Map } from "./Map";
+import { Map } from "./components/Map";
 
 export const MapContainer = ({ MapContext }) => {
   return (

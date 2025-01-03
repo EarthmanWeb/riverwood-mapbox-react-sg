@@ -91,7 +91,7 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
       try {
         popupRef.current = new mapboxgl.Popup({ 
           closeButton: false,
-          className: 'property-hover-popup'
+          className: 'property-hover-popup  tile-hover-popup'
         })
           .setLngLat(feature.geometry.coordinates)
           .setHTML(`<h5 class="mb-0 pb-0">${feature.properties.title}</h5><p class="mb-0 pb-0">${feature.properties.display_address}</p>`)
@@ -153,6 +153,15 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
               <h4>{props.title}</h4>
               <p className="address">{props.display_address}</p>
               <p className="price">{priceRange}</p>
+              <button 
+                className="details-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleTileClick(props);
+                }}
+              >
+                Details
+              </button>
             </div>
           );
         })}

@@ -56,6 +56,7 @@
 }
 
 .property-tile {
+  position: relative;  /* Ensure this is present */
   flex: 0 0 250px;
   background: white;
   border-radius: 8px;
@@ -101,4 +102,22 @@
   font-size: 13px;
   font-weight: bold;
   color: #333;
+}
+
+.property-tile .details-button {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  background: #0275d8;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.property-tile focused .details-button {
+  bottom: 10px;
 }
