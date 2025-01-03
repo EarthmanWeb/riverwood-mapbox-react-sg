@@ -1,16 +1,35 @@
 .property-popup-slideshow {
   flex: 1;
   display: flex;
-  overflow-x: auto;
+  overflow-x: scroll; /* changed from auto */
   gap: 10px;
   padding: 10px;
   -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x mandatory;
+  /* removed scroll-snap-type */
   scrollbar-width: thin;
+  cursor: grab;
+  user-select: none;
+}
+
+.property-popup-slideshow:active {
+  cursor: grabbing;
+}
+
+.property-popup-slideshow::-webkit-scrollbar {
+  height: 8px;
+  background: transparent;
+  -webkit-appearance: none;
+}
+
+.property-popup-slideshow::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  min-width: 60px;
 }
 
 .property-popup-slideshow img {
-  max-height: 300px;
+  max-height: 500px;
+  max-width: 600px;
   object-fit: cover;
   border-radius: 8px;
   scroll-snap-align: start;
@@ -18,6 +37,14 @@
   transition: transform 0.2s;
   min-height: 200px; /* Add minimum height for loading state */
   background: #f0f0f0; /* Add background for loading state */
+}
+
+/* mobile only */
+@media (max-width: 768px) {
+  .property-popup-slideshow img {
+    max-height: 300px;
+    max-width: 250px;
+  }
 }
 
 /* .property-popup-slideshow img:hover {

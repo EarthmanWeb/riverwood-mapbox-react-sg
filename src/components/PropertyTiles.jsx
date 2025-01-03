@@ -27,7 +27,7 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
     e.preventDefault();
     const container = scrollContainerRef.current;
     if (container) {
-      container.scrollLeft -= e.deltaY;
+      container.scrollLeft += e.deltaY; // Changed from -= to +=
     }
   };
 

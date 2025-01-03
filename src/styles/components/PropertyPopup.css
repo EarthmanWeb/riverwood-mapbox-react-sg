@@ -49,10 +49,16 @@
 
 .property-popup-header h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
   max-width: 98%;
 }
 
+/* mobile only */
+@media (max-width: 768px) {
+  .property-popup-header h2 {
+    font-size: 1.5rem;
+  }
+}
 
 .close-button {
   position: absolute;
