@@ -46,14 +46,27 @@
   background: #f0f0f0;
   padding: 10px 20px 0px;
 }
+
+.property-popup-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  max-width: 98%;
+}
+
+
 .close-button {
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 10px;
-  background: transparent;
-  border: none;
+  background: #fff;
+  border: solid 1px var(--riverwood-blue);
+  height: 30px;
+  width: 30px;
+  padding: 0;
+  border-radius: 50%;
   font-size: 24px;
   cursor: pointer;
+  z-index: 100;
 }
 
 .property-popup-content {
