@@ -12,8 +12,15 @@ import PropertyLabels from './PropertyLabels';
 const PropertyPopup = ({ property, onClose }) => {
   if (!property) return null;
 
+  const handleOverlayClick = (e) => {
+    // Only close if clicking the overlay itself, not its children
+    if (e.target.className === 'property-popup-overlay') {
+      onClose();
+    }
+  };
+
   return (
-    <div className="property-popup-overlay">
+    <div className="property-popup-overlay" onClick={handleOverlayClick}>
       <div className="property-popup">
         <button className="close-button" onClick={onClose}>×</button>
         <div className="property-popup-content">

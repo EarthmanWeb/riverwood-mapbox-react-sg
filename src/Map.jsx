@@ -73,26 +73,35 @@ export const Map = ({ lng, lat, zoom }) => {
     map.current.off('mouseenter', 'property-points');
     map.current.off('mouseleave', 'property-points');
 
+    // Click handler
     map.current.on('click', 'property-points', (e) => {
       if (!e.features?.[0]) return;
       const featureId = e.features[0].properties.id;
-      console.log('Clicked feature ID:', featureId);
       setFocusedFeatureId(featureId);
     });
 
-    // Mouse interactions
-    map.current.on('mouseenter', 'property-points', () => {
+    // Hover handlers
+    map.current.on('mouseenter', 'property-points', (e) => {
       map.current.getCanvas().style.cursor = 'pointer';
+      
+      if (e.features.length > 0) {
+        if (popup.current) popup.current.remove();
+        
+        popup.current = new mapboxgl.Popup({ 
+          closeButton: false,
+          className: 'property-hover-popup'
+        })
+          .setLngLat(e.features[0].geometry.coordinates)
+          .setHTML(`<h5 class="mb-0 pb-0">${e.features[0].properties.title}</h5><p class="mb-0 pb-0">${e.features[0].properties.display_address}</p>`)
+          .addTo(map.current);
+      }
     });
 
     map.current.on('mouseleave', 'property-points', () => {
       map.current.getCanvas().style.cursor = '';
+      if (popup.current) popup.current.remove();
     });
-
   };
-
-
-  
   const preloadImages = (features) => {
     features.forEach(feature => {
       const img = new Image();
@@ -120,6 +129,10 @@ export const Map = ({ lng, lat, zoom }) => {
         [-50.31, 70.01]   // Northeast coordinates (includes Maine)
       ]
     });
+
+    // Make map instance globally available
+    window.mapInstance = map.current;
+    // console.log('Map instance set to window.mapInstance:', window.mapInstance);
 
     // Single load event
     map.current.on('load', async () => {

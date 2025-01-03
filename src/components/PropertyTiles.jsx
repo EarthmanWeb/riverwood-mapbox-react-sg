@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import mapboxgl from 'mapbox-gl';  // Add this import
 import '../styles/components/PropertyTiles.css';
 import PropertyPopup from './PropertyPopup'; // Import the new component
 import React from 'react';
@@ -8,6 +9,7 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
   const scrollContainerRef = useRef(null);
   const tileRefs = useRef({});
   const [selectedProperty, setSelectedProperty] = useState(null); // State to manage selected property
+  const popupRef = useRef(null);  // Add this ref for popup management
 
   // Effect to scroll to focused feature
   useEffect(() => {
@@ -67,6 +69,47 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
     setSelectedProperty(null);
   };
 
+  const handleTileHover = (feature, hovered) => {
+    // console.log('Tile hover event:', { hovered, feature });
+    const map = window.mapInstance;
+    // console.log('Map instance from window:', map);
+
+    if (!map) {
+      console.error('Map instance not found!');
+      return;
+    }
+
+    if (hovered) {
+      // console.log('Creating popup for:', feature.properties.title);
+      // console.log('Using coordinates:', feature.geometry.coordinates);
+
+      if (popupRef.current) {
+        // console.log('Removing existing popup');
+        popupRef.current.remove();
+      }
+      
+      try {
+        popupRef.current = new mapboxgl.Popup({ 
+          closeButton: false,
+          className: 'property-hover-popup'
+        })
+          .setLngLat(feature.geometry.coordinates)
+          .setHTML(`<h5 class="mb-0 pb-0">${feature.properties.title}</h5><p class="mb-0 pb-0">${feature.properties.display_address}</p>`)
+          .addTo(map);
+        
+        // console.log('Popup created and added to map:', popupRef.current);
+      } catch (error) {
+        console.error('Error creating popup:', error);
+      }
+    } else {
+      // console.log('Mouse leave - removing popup');
+      if (popupRef.current) {
+        popupRef.current.remove();
+        popupRef.current = null;
+      }
+    }
+  };
+
   return (
     <ErrorBoundary>
       <div 
@@ -95,6 +138,8 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
               className={`property-tile ${isFocused ? 'focused' : ''}`}
               ref={el => tileRefs.current[feature.properties.id] = el}
               onClick={() => handleTileClick(props)} // Add click handler
+              onMouseEnter={() => handleTileHover(feature, true)}
+              onMouseLeave={() => handleTileHover(feature, false)}
             >
               <img 
                 src={props.image} 

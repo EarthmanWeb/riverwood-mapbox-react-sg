@@ -1,0 +1,17 @@
+.property-hover-popup {
+  z-index: 1000;
+}
+
+.property-hover-popup .mapboxgl-popup-content {
+  padding: 10px;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.property-hover-popup h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+}
