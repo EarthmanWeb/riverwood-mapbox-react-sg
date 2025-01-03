@@ -1,0 +1,627 @@
+{
+  "properties": [
+    {
+      "title": "Old National Plaza",
+      "image": "https://picsum.photos/800/600",
+      "lat": "33.5847",
+      "lng": "-84.4947",
+      "display_address": "5245 Old National Hwy, College Park, GA 30349",
+      "map_address": "5245 Old National Hwy, College Park, GA 30349",
+      "description": "Prime retail location featuring 15,000 SF of retail space with ample parking. Excellent visibility from Old National Highway with 25,000 VPD traffic count.",
+      "downloads": {
+        "Site Plan": "https://example.com/siteplans/oldnational.pdf",
+        "Property Brochure": "https://example.com/brochures/oldnational.pdf"
+      },
+      "images": {
+        "Exterior": "https://picsum.photos/800/600",
+        "Interior": "https://picsum.photos/800/600",
+        "Aerial": "https://picsum.photos/800/600"
+      },
+      "city": "College Park",
+      "state": "GA",
+      "zipcode": "30349",
+      "trafficCount": 25000,
+      "type": "Retail Centers",
+      "status": "available",
+      "features": ["drive-thru", "trash-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 2425,
+          "threeMile": 24118,
+          "fiveMile": 47747
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 1706,
+          "threeMile": 12103,
+          "fiveMile": 20625
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 62680,
+          "threeMile": 86647,
+          "fiveMile": 92444
+        },
+        {
+          "type": "Households",
+          "oneMile": 933,
+          "threeMile": 9190,
+          "fiveMile": 17275
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Suite A",
+          "price": 2500,
+          "units": 1,
+          "size": 1500,
+          "description": "Corner retail unit with drive-thru capability",
+          "available": true
+        },
+        {
+          "suite": "Suite B",
+          "price": 1800,
+          "units": 1,
+          "size": 1200,
+          "description": "Interior retail space",
+          "available": false
+        }
+      ],
+      "propertyManager": "Allie Hodge - Leasing Manager",
+      "labels": ["Retail"]
+    },
+    {
+      "title": "Charlotte Medical Center",
+      "image": "https://picsum.photos/800/600",
+      "lat": "35.2271",
+      "lng": "-80.8431",
+      "display_address": "1200 Medical Plaza Dr, Charlotte, NC 28262",
+      "map_address": "1200 Medical Plaza Dr, Charlotte, NC 28262",
+      "description": "Modern medical office building in prime Charlotte location. Recently renovated with state-of-the-art facilities.",
+      "downloads": {
+        "Floor Plans": "https://example.com/floorplans/charlotte.pdf",
+        "Leasing Info": "https://example.com/leasing/charlotte.pdf"
+      },
+      "images": {
+        "Building": "https://picsum.photos/800/600",
+        "Lobby": "https://picsum.photos/800/600"
+      },
+      "city": "Charlotte",
+      "state": "NC",
+      "zipcode": "28262",
+      "trafficCount": 35000,
+      "type": "Medical/Office",
+      "status": "for-lease",
+      "features": ["water-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 5425,
+          "threeMile": 45118,
+          "fiveMile": 89747
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 12706,
+          "threeMile": 52103,
+          "fiveMile": 98625
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 82680,
+          "threeMile": 96647,
+          "fiveMile": 102444
+        },
+        {
+          "type": "Households",
+          "oneMile": 2933,
+          "threeMile": 19190,
+          "fiveMile": 37275
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Suite 200",
+          "price": 4500,
+          "units": 1,
+          "size": 2500,
+          "description": "Medical office suite with private entrance",
+          "available": true
+        }
+      ],
+      "propertyManager": "Paula Petakos - Property Manager",
+      "labels": ["Medical", "Office"]
+    },
+    {
+      "title": "Birmingham Distribution Center",
+      "image": "https://picsum.photos/800/600?random=3",
+      "lat": "33.5186",
+      "lng": "-86.8104",
+      "display_address": "2200 Industrial Blvd, Birmingham, AL 35204",
+      "map_address": "2200 Industrial Blvd, Birmingham, AL 35204",
+      "description": "Modern warehouse facility with 24' clear height, loading docks, and easy interstate access.",
+      "downloads": {
+        "Warehouse Specs": "https://example.com/specs/birmingham.pdf",
+        "Site Layout": "https://example.com/layout/birmingham.pdf"
+      },
+      "images": {
+        "Warehouse": "https://picsum.photos/800/600?random=4",
+        "Loading Dock": "https://picsum.photos/800/600?random=5",
+        "Aerial": "https://picsum.photos/800/600?random=6"
+      },
+      "city": "Birmingham",
+      "state": "AL",
+      "zipcode": "35204",
+      "trafficCount": 42000,
+      "type": "Industrial",
+      "status": "for-lease",
+      "features": ["trash-included-in-cam", "water-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 3245,
+          "threeMile": 28550,
+          "fiveMile": 52680
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 5890,
+          "threeMile": 32450,
+          "fiveMile": 58900
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 58250,
+          "threeMile": 72340,
+          "fiveMile": 85620
+        },
+        {
+          "type": "Households",
+          "oneMile": 1250,
+          "threeMile": 11450,
+          "fiveMile": 21580
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Warehouse A",
+          "price": 8500,
+          "units": 1,
+          "size": 25000,
+          "description": "Distribution warehouse with 3 loading docks",
+          "available": true
+        },
+        {
+          "suite": "Office 101",
+          "price": 2200,
+          "units": 1,
+          "size": 1500,
+          "description": "Front office space",
+          "available": true
+        }
+      ],
+      "propertyManager": "Anita Ford - Property Manager",
+      "labels": ["Industrial", "Warehouse"]
+    },
+    {
+      "title": "Lexington Restaurant Space",
+      "image": "https://picsum.photos/800/600?random=7",
+      "lat": "38.0406",
+      "lng": "-84.5037",
+      "display_address": "145 Main Street, Lexington, KY 40507",
+      "map_address": "145 Main Street, Lexington, KY 40507",
+      "description": "Turn-key restaurant space in downtown Lexington with existing hood system and grease trap.",
+      "downloads": {
+        "Restaurant Layout": "https://example.com/layout/lexington.pdf",
+        "Equipment List": "https://example.com/equipment/lexington.pdf"
+      },
+      "images": {
+        "Storefront": "https://picsum.photos/800/600?random=8",
+        "Kitchen": "https://picsum.photos/800/600?random=9",
+        "Dining Room": "https://picsum.photos/800/600?random=10"
+      },
+      "city": "Lexington",
+      "state": "KY",
+      "zipcode": "40507",
+      "trafficCount": 18500,
+      "type": "Restaurant",
+      "status": "for-lease",
+      "features": ["grease-trap", "trash-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 15240,
+          "threeMile": 89750,
+          "fiveMile": 167890
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 45670,
+          "threeMile": 98450,
+          "fiveMile": 145670
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 75890,
+          "threeMile": 89670,
+          "fiveMile": 98450
+        },
+        {
+          "type": "Households",
+          "oneMile": 6780,
+          "threeMile": 35670,
+          "fiveMile": 65890
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Main Floor",
+          "price": 6500,
+          "units": 1,
+          "size": 3200,
+          "description": "Full restaurant space with bar area",
+          "available": true
+        }
+      ],
+      "propertyManager": "Ron Chanin - Leasing Manager",
+      "labels": ["Restaurant", "Retail"]
+    },
+    {
+      "title": "Columbia Medical Plaza",
+      "image": "https://picsum.photos/800/600?random=11",
+      "lat": "34.0007",
+      "lng": "-81.0348",
+      "display_address": "2750 Laurel Street, Columbia, SC 29204",
+      "map_address": "2750 Laurel Street, Columbia, SC 29204",
+      "description": "Class A medical office space adjacent to major hospital system. Recently updated with modern amenities.",
+      "downloads": {
+        "Medical Suite Plans": "https://example.com/plans/columbia-medical.pdf",
+        "Parking Map": "https://example.com/parking/columbia.pdf"
+      },
+      "images": {
+        "Building": "https://picsum.photos/800/600?random=12",
+        "Reception": "https://picsum.photos/800/600?random=13",
+        "Suite Interior": "https://picsum.photos/800/600?random=14"
+      },
+      "city": "Columbia",
+      "state": "SC",
+      "zipcode": "29204",
+      "trafficCount": 28900,
+      "type": "Medical/Office",
+      "status": "available",
+      "features": ["water-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 8920,
+          "threeMile": 45670,
+          "fiveMile": 98450
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 25670,
+          "threeMile": 78900,
+          "fiveMile": 156780
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 68900,
+          "threeMile": 82450,
+          "fiveMile": 95670
+        },
+        {
+          "type": "Households",
+          "oneMile": 3450,
+          "threeMile": 18900,
+          "fiveMile": 38670
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Suite 300",
+          "price": 5200,
+          "units": 1,
+          "size": 2800,
+          "description": "Medical office suite with procedure rooms",
+          "available": true
+        },
+        {
+          "suite": "Suite 302",
+          "price": 3800,
+          "units": 1,
+          "size": 1800,
+          "description": "Medical office with waiting area",
+          "available": true
+        }
+      ],
+      "propertyManager": "Natasha Suarez - Property Manager",
+      "labels": ["Medical", "Office"]
+    },
+    {
+      "title": "Savannah Retail Center",
+      "image": "https://picsum.photos/800/600?random=15",
+      "lat": "32.0809",
+      "lng": "-81.0912",
+      "display_address": "7805 Abercorn Street, Savannah, GA 31406",
+      "map_address": "7805 Abercorn Street, Savannah, GA 31406",
+      "description": "Prime retail location in Savannah's busiest shopping corridor. Excellent visibility and access.",
+      "downloads": {
+        "Retail Site Plan": "https://example.com/plans/savannah-retail.pdf",
+        "Traffic Study": "https://example.com/traffic/savannah.pdf"
+      },
+      "images": {
+        "Center": "https://picsum.photos/800/600?random=16",
+        "Storefront": "https://picsum.photos/800/600?random=17",
+        "Parking": "https://picsum.photos/800/600?random=18"
+      },
+      "city": "Savannah",
+      "state": "GA",
+      "zipcode": "31406",
+      "trafficCount": 45200,
+      "type": "Retail Centers",
+      "status": "for-lease",
+      "features": ["nail-salon-available", "hair-salon-available"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 12450,
+          "threeMile": 58900,
+          "fiveMile": 125670
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 8900,
+          "threeMile": 45670,
+          "fiveMile": 89000
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 72450,
+          "threeMile": 85670,
+          "fiveMile": 98900
+        },
+        {
+          "type": "Households",
+          "oneMile": 4890,
+          "threeMile": 22450,
+          "fiveMile": 45670
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Suite 101",
+          "price": 3200,
+          "units": 1,
+          "size": 1800,
+          "description": "End-cap retail space with excellent visibility",
+          "available": true
+        },
+        {
+          "suite": "Suite 103",
+          "price": 2800,
+          "units": 1,
+          "size": 1500,
+          "description": "Retail space ideal for salon",
+          "available": true
+        }
+      ],
+      "propertyManager": "Amber Mann - Leasing Manager",
+      "labels": ["Retail"]
+    },
+    {
+      "title": "Huntsville Tech Park",
+      "image": "https://picsum.photos/800/600?random=19",
+      "lat": "34.7304",
+      "lng": "-86.5861",
+      "display_address": "3325 Research Park Blvd, Huntsville, AL 35806",
+      "map_address": "3325 Research Park Blvd, Huntsville, AL 35806",
+      "description": "Modern office space in Huntsville's growing tech corridor. Close to major aerospace and defense contractors.",
+      "downloads": {
+        "Office Plans": "https://example.com/plans/huntsville-tech.pdf",
+        "Area Overview": "https://example.com/overview/huntsville.pdf"
+      },
+      "images": {
+        "Building": "https://picsum.photos/800/600?random=20",
+        "Office Space": "https://picsum.photos/800/600?random=21",
+        "Conference Room": "https://picsum.photos/800/600?random=22"
+      },
+      "city": "Huntsville",
+      "state": "AL",
+      "zipcode": "35806",
+      "trafficCount": 32000,
+      "type": "Medical/Office",
+      "status": "available",
+      "features": ["water-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 4500,
+          "threeMile": 35600,
+          "fiveMile": 89000
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 15600,
+          "threeMile": 45000,
+          "fiveMile": 95600
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 89000,
+          "threeMile": 95600,
+          "fiveMile": 102000
+        },
+        {
+          "type": "Households",
+          "oneMile": 1800,
+          "threeMile": 14500,
+          "fiveMile": 35600
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Suite 400",
+          "price": 6800,
+          "units": 1,
+          "size": 4200,
+          "description": "Open concept office space with mountain views",
+          "available": true
+        },
+        {
+          "suite": "Suite 402",
+          "price": 4500,
+          "units": 1,
+          "size": 2800,
+          "description": "Modern office suite with conference rooms",
+          "available": true
+        }
+      ],
+      "propertyManager": "Shirley Sokolowski - Property Manager",
+      "labels": ["Office", "New Construction"]
+    },
+    {
+      "title": "Raleigh Innovation Campus",
+      "image": "https://picsum.photos/800/600?random=23",
+      "lat": "35.7796",
+      "lng": "-78.6382",
+      "display_address": "2650 Research Drive, Raleigh, NC 27695",
+      "map_address": "2650 Research Drive, Raleigh, NC 27695",
+      "description": "<p>State-of-the-art research and development facility in Raleigh's thriving tech corridor. Adjacent to <a href='https://www.ncsu.edu' target='_blank'>NC State University</a>.</p><ul><li>Flexible lab and office configurations</li><li>24/7 secure access</li><li>Fiber connectivity</li><li>Backup power systems</li></ul><p>Visit our <a href='https://example.com/virtual-tour'>virtual tour</a> to explore the facilities.</p>",
+      "downloads": {
+        "Tech Specs": "https://example.com/specs/raleigh-tech.pdf",
+        "Floor Plans": "https://example.com/plans/raleigh-innovation.pdf",
+        "Environmental Report": "https://example.com/env/raleigh.pdf"
+      },
+      "images": {
+        "Aerial": "https://picsum.photos/800/600?random=24",
+        "Lab Space": "https://picsum.photos/800/600?random=25",
+        "Collaboration Area": "https://picsum.photos/800/600?random=26"
+      },
+      "city": "Raleigh",
+      "state": "NC",
+      "zipcode": "27695",
+      "trafficCount": 28500,
+      "type": "Medical/Office",
+      "status": "for-lease",
+      "features": ["water-included-in-cam", "trash-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 12450,
+          "threeMile": 85600,
+          "fiveMile": 156700
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 25600,
+          "threeMile": 95400,
+          "fiveMile": 178900
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 92400,
+          "threeMile": 98700,
+          "fiveMile": 105600
+        },
+        {
+          "type": "Households",
+          "oneMile": 4800,
+          "threeMile": 32600,
+          "fiveMile": 58900
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Lab 101",
+          "price": 12500,
+          "units": 1,
+          "size": 5000,
+          "description": "Wet lab space with dedicated HVAC",
+          "available": true
+        },
+        {
+          "suite": "Office 205",
+          "price": 8500,
+          "units": 1,
+          "size": 3500,
+          "description": "Modern office space with lab access",
+          "available": true
+        }
+      ],
+      "propertyManager": "Marrissa Chanin - Leasing Manager",
+      "labels": ["Office", "Medical", "New Construction"]
+    },
+    {
+      "title": "Augusta Commerce Center",
+      "image": "https://picsum.photos/800/600?random=27",
+      "lat": "33.4735",
+      "lng": "-82.0107",
+      "display_address": "3520 Wrightboro Road, Augusta, GA 30909",
+      "map_address": "3520 Wrightboro Road, Augusta, GA 30909",
+      "description": "<p>Premier mixed-use development in Augusta's growing commercial district.</p><div class='highlights'><h3>Property Highlights:</h3><ul><li>Direct access to I-20</li><li>Recently renovated common areas</li><li>On-site property management</li><li>Adjacent to <a href='https://augustanational.com'>Augusta National Golf Club</a></li></ul></div><p>Current tenants include:</p><ol><li>Regional healthcare providers</li><li>Financial services firms</li><li>Technology companies</li></ol><p>Contact <a href='mailto:leasing@example.com'>leasing team</a> for current availability.</p>",
+      "downloads": {
+        "Property Overview": "https://example.com/overview/augusta.pdf",
+        "Site Plan": "https://example.com/plans/augusta-commerce.pdf"
+      },
+      "images": {
+        "Exterior": "https://picsum.photos/800/600?random=28",
+        "Lobby": "https://picsum.photos/800/600?random=29",
+        "Common Area": "https://picsum.photos/800/600?random=30"
+      },
+      "city": "Augusta",
+      "state": "GA",
+      "zipcode": "30909",
+      "trafficCount": 38900,
+      "type": "Medical/Office",
+      "status": "for-lease",
+      "features": ["water-included-in-cam", "trash-included-in-cam"],
+      "demographics": [
+        {
+          "type": "Population",
+          "oneMile": 8900,
+          "threeMile": 45600,
+          "fiveMile": 98700
+        },
+        {
+          "type": "Work Day Population",
+          "oneMile": 12500,
+          "threeMile": 56700,
+          "fiveMile": 89400
+        },
+        {
+          "type": "Average Household Income",
+          "oneMile": 75600,
+          "threeMile": 82400,
+          "fiveMile": 94500
+        },
+        {
+          "type": "Households",
+          "oneMile": 3400,
+          "threeMile": 18500,
+          "fiveMile": 35600
+        }
+      ],
+      "tenants": [
+        {
+          "suite": "Suite 400",
+          "price": 4200,
+          "units": 1,
+          "size": 2200,
+          "description": "Corner office suite with golf course views",
+          "available": true
+        },
+        {
+          "suite": "Suite 450",
+          "price": 3800,
+          "units": 1,
+          "size": 1800,
+          "description": "Medical office ready for buildout",
+          "available": true
+        }
+      ],
+      "propertyManager": "Erika Radilla - Leasing Manager",
+      "labels": ["Medical", "Office"]
+    }
+  ]
+}

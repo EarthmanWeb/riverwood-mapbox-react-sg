@@ -10,14 +10,7 @@ const navItems = {
     { label: 'Tenants', path: '/tenants/' },
     {
       label: 'Services',
-      path: '/commercial-real-estate-management-and-development/',
-      children: [
-        { label: 'Tenant Representation', path: '#tenant-representation' },
-        { label: 'Landlord Representation', path: '#landlord-representation' },
-        { label: 'Property Management', path: '#property-management' },
-        { label: 'Development', path: '#development' },
-        { label: 'Asset Management', path: '#asset-management' }
-      ]
+      path: '/commercial-real-estate-management-and-development/'
     },
     { label: 'Work with Us', path: '/contact/' }
   ]

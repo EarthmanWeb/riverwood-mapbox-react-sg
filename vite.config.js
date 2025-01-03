@@ -4,9 +4,22 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/properties/' : '/',
   server: {
-    port: 3000
+    proxy: {
+      '/api/highlevel': {
+        target: 'https://services.leadconnectorhq.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/highlevel/, ''),
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            // Preserve original headers
+            Object.keys(req.headers).forEach(key => {
+              proxyReq.setHeader(key, req.headers[key]);
+            });
+          });
+        }
+      }
+    }
   },
   build: {
     clean: true,
