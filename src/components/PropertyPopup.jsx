@@ -17,13 +17,16 @@ const PropertyPopup = ({ property, onClose }) => {
       <div className="property-popup">
         <button className="close-button" onClick={onClose}>×</button>
         <div className="property-popup-content">
-        <div className="property-popup-header">
-          <h2>{property.title}
-          <PropertyLabels labels={property.labels} />
-          </h2>
-          <p>{property.price}</p>
-          <PropertyImages images={property.images} />
-        </div>
+          <div className="property-popup-header">
+            <h2>{property.title}
+              <PropertyLabels labels={property.labels} />
+            </h2>
+            <p>{property.price}</p>
+            <PropertyImages 
+              images={property.images} 
+              image={property.image}  // Add featured image
+            />
+          </div>
           <div className="property-popup-details">
               <PropertyAddress 
                 display_address={property.display_address}
