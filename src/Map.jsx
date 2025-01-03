@@ -113,7 +113,12 @@ export const Map = ({ lng, lat, zoom }) => {
       bearing: 0, // Force north orientation
       pitchWithRotate: false, // Disable pitch with rotate gesture
       maxPitch: 0, // Prevent any pitch adjustment
-      minPitch: 0  // Prevent any pitch adjustment
+      minPitch: 0,  // Prevent any pitch adjustment
+      minZoom: 3.5, // Add minimum zoom level
+      maxBounds: [
+        [-170.15, 14.0], // Southwest coordinates (includes Mexico)
+        [-50.31, 70.01]   // Northeast coordinates (includes Maine)
+      ]
     });
 
     // Single load event
