@@ -1,9 +1,13 @@
-import { useRef, useEffect } from 'react';
-import './PropertyTiles.css';
+import { useRef, useEffect, useState } from 'react';
+import '../styles/components/PropertyTiles.css';
+import PropertyPopup from './PropertyPopup'; // Import the new component
+import React from 'react';
+import ErrorBoundary from './ErrorBoundary';
 
 export const PropertyTiles = ({ features, focusedFeatureId }) => {
   const scrollContainerRef = useRef(null);
   const tileRefs = useRef({});
+  const [selectedProperty, setSelectedProperty] = useState(null); // State to manage selected property
 
   // Effect to scroll to focused feature
   useEffect(() => {
@@ -12,7 +16,6 @@ export const PropertyTiles = ({ features, focusedFeatureId }) => {
       const tile = tileRefs.current[focusedFeatureId];
       
       const scrollLeft = tile.offsetLeft - container.offsetWidth / 2 + tile.offsetWidth / 2;
-      console.log('Scrolling to:', scrollLeft);
       container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
     }
   }, [focusedFeatureId]);
@@ -22,7 +25,6 @@ export const PropertyTiles = ({ features, focusedFeatureId }) => {
     e.preventDefault();
     const container = scrollContainerRef.current;
     if (container) {
-      // Invert the delta to match natural scrolling direction
       container.scrollLeft -= e.deltaY;
     }
   };
@@ -56,41 +58,54 @@ export const PropertyTiles = ({ features, focusedFeatureId }) => {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  return (
-    <div 
-      className="property-tiles-container" 
-      ref={scrollContainerRef}
-      onMouseDown={handleMouseDown}
-    >
-      {features.map((feature, index) => {
-        const props = feature.properties;
-        const isFocused = feature.properties.id === focusedFeatureId;
-        console.log('Feature ID:', feature.properties.id, 'Focused:', isFocused);
-        let priceRange = 'Contact for Pricing';
-        
-        try {
-          const tenants = JSON.parse(props.tenants);
-          if (tenants?.length) {
-            const prices = tenants.map(t => t.price);
-            priceRange = `$${Math.min(...prices).toLocaleString()} - $${Math.max(...prices).toLocaleString()}`;
-          }
-        } catch (error) {
-          console.error('Error parsing tenants:', error);
-        }
+  const handleTileClick = (property) => {
+    setSelectedProperty(property);
+  };
 
-        return (
-          <div 
-            key={feature.properties.id || index} 
-            className={`property-tile ${isFocused ? 'focused' : ''}`}
-            ref={el => tileRefs.current[feature.properties.id] = el}
-          >
-            <img src={props.image} alt={props.title} />
-            <h4>{props.title}</h4>
-            <p className="address">{props.display_address}</p>
-            <p className="price">{priceRange}</p>
-          </div>
-        );
-      })}
-    </div>
+  const handleClosePopup = () => {
+    setSelectedProperty(null);
+  };
+
+  return (
+    <ErrorBoundary>
+      <div 
+        className="property-tiles-container" 
+        ref={scrollContainerRef}
+        onMouseDown={handleMouseDown}
+      >
+        {features.map((feature, index) => {
+          const props = feature.properties;
+          const isFocused = feature.properties.id === focusedFeatureId;
+          let priceRange = 'Contact for Pricing';
+          
+          try {
+            const tenants = JSON.parse(props.tenants);
+            if (tenants?.length) {
+              const prices = tenants.map(t => t.price);
+              priceRange = `$${Math.min(...prices).toLocaleString()} - $${Math.max(...prices).toLocaleString()}`;
+            }
+          } catch (error) {
+            console.error('Error parsing tenants:', error);
+          }
+
+          return (
+            <div 
+              key={feature.properties.id || index} 
+              className={`property-tile ${isFocused ? 'focused' : ''}`}
+              ref={el => tileRefs.current[feature.properties.id] = el}
+              onClick={() => handleTileClick(props)} // Add click handler
+            >
+              <img src={props.image} alt={props.title} style={{ cursor: 'pointer' }} />
+              <h4>{props.title}</h4>
+              <p className="address">{props.display_address}</p>
+              <p className="price">{priceRange}</p>
+            </div>
+          );
+        })}
+      </div>
+      {selectedProperty && (
+        <PropertyPopup property={selectedProperty} onClose={handleClosePopup} />
+      )}
+    </ErrorBoundary>
   );
 };

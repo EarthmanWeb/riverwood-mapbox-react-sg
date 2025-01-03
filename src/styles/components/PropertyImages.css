@@ -1,0 +1,13 @@
+.property-popup-slideshow {
+  flex: 1;
+  display: flex;
+  overflow-x: scroll;
+  gap: 10px;
+  padding: 10px;
+}
+
+.property-popup-slideshow img {
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}

@@ -1,6 +1,7 @@
 {
   "properties": [
     {
+      "id": "property-1",
       "title": "Old National Plaza",
       "image": "https://picsum.photos/800/600",
       "lat": "33.5847",
@@ -72,6 +73,7 @@
       "labels": ["Retail"]
     },
     {
+      "id": "property-2",
       "title": "Charlotte Medical Center",
       "image": "https://picsum.photos/800/600",
       "lat": "35.2271",
@@ -134,6 +136,7 @@
       "labels": ["Medical", "Office"]
     },
     {
+      "id": "property-3",
       "title": "Birmingham Distribution Center",
       "image": "https://picsum.photos/800/600?random=3",
       "lat": "33.5186",
@@ -205,6 +208,7 @@
       "labels": ["Industrial", "Warehouse"]
     },
     {
+      "id": "property-4",
       "title": "Lexington Restaurant Space",
       "image": "https://picsum.photos/800/600?random=7",
       "lat": "38.0406",
@@ -268,6 +272,7 @@
       "labels": ["Restaurant", "Retail"]
     },
     {
+      "id": "property-5",
       "title": "Columbia Medical Plaza",
       "image": "https://picsum.photos/800/600?random=11",
       "lat": "34.0007",
@@ -339,6 +344,7 @@
       "labels": ["Medical", "Office"]
     },
     {
+      "id": "property-6",
       "title": "Savannah Retail Center",
       "image": "https://picsum.photos/800/600?random=15",
       "lat": "32.0809",
@@ -410,6 +416,7 @@
       "labels": ["Retail"]
     },
     {
+      "id": "property-7",
       "title": "Huntsville Tech Park",
       "image": "https://picsum.photos/800/600?random=19",
       "lat": "34.7304",
@@ -481,6 +488,7 @@
       "labels": ["Office", "New Construction"]
     },
     {
+      "id": "property-8",
       "title": "Raleigh Innovation Campus",
       "image": "https://picsum.photos/800/600?random=23",
       "lat": "35.7796",
@@ -553,6 +561,7 @@
       "labels": ["Office", "Medical", "New Construction"]
     },
     {
+      "id": "property-9",
       "title": "Augusta Commerce Center",
       "image": "https://picsum.photos/800/600?random=27",
       "lat": "33.4735",

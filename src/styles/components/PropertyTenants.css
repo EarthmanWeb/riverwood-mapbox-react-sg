@@ -1,0 +1,47 @@
+.tenants-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 0;
+  display: block; /* Ensure block display */
+}
+
+.tenants-table {
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  width: 100%;
+  min-width: 600px; /* Set minimum width to ensure scrolling */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.tenants-table th,
+.tenants-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  white-space: wrap; /* Prevent text wrapping */
+}
+
+/* Remove all the fixed column width definitions */
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-available {
+  background-color: #4CAF50;
+}
+
+.status-occupied {
+  background-color: #f44336;
+}

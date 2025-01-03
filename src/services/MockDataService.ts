@@ -83,13 +83,9 @@ export class MockDataService {
         coordinates: [Number(property.lng), Number(property.lat)]
       },
       properties: {
-        id: property.id, // Include the ID in the properties
-        title: property.title,
-        image: property.image,
-        display_address: property.display_address,
-        status: property.status,
-        tenants: JSON.stringify(property.tenants),
-        type: property.type
+        ...property,
+        tenants: property.tenants, // Don't stringify
+        coordinates: [Number(property.lng), Number(property.lat)]
       }
     }));
   }

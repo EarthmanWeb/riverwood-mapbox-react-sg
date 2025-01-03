@@ -91,36 +91,8 @@ export const Map = ({ lng, lat, zoom }) => {
 
   };
 
-  const createPopupContent = (props, coordinates) => {
-    let priceRange = 'Contact for Pricing';
-    try {
-      const tenants = JSON.parse(props.tenants);
-      if (tenants?.length) {
-        const prices = tenants.map(t => t.price);
-        priceRange = `$${Math.min(...prices).toLocaleString()} - $${Math.max(...prices).toLocaleString()}`;
-      }
-    } catch (error) {
-      console.error('Error parsing tenants:', error);
-    }
 
-    return `
-      <div class="property-popup">
-        <div class="image-container">
-          <div class="loading-placeholder">Loading...</div>
-          <img 
-            src="${props.image}" 
-            alt="${props.title}"
-            onload="this.classList.add('loaded'); this.parentElement.querySelector('.loading-placeholder').style.display='none';"
-          />
-        </div>
-        <h3>${props.title}</h3>
-        <p>${props.display_address}</p>
-        <p><strong>Status:</strong> ${props.status}</p>
-        <p><strong>Price:</strong> ${priceRange}</p>
-      </div>
-    `;
-  };
-
+  
   const preloadImages = (features) => {
     features.forEach(feature => {
       const img = new Image();
@@ -221,7 +193,7 @@ export const Map = ({ lng, lat, zoom }) => {
           }
         }, 100);
 
-        console.log('Properties loaded and added to map');
+        // console.log('Properties loaded and added to map');
       } catch (error) {
         console.error('Error initializing map:', error);
       }

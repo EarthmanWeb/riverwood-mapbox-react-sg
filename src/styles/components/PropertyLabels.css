@@ -1,0 +1,24 @@
+
+.property-labels {
+    margin: 0;
+    display: block;
+    width: 100%;
+  }
+  
+  .labels-container {
+    margin-right: 2rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+  
+  .property-label {
+    background-color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    color: #444;
+  }
+  
