@@ -51,12 +51,12 @@ export const Map = ({ lng, lat, zoom }) => {
         source: 'properties',
         paint: {
           'circle-radius': ['interpolate', ['linear'], ['zoom'],
-            10, 4,  // smaller at zoom level 10
-            16, 8   // larger at zoom level 16
+            10, 8,  // smaller at zoom level 10
+            16, 12   // larger at zoom level 16
           ],
-          'circle-color': '#00008B', // Dark blue
-          'circle-stroke-width': 1.5,
-          'circle-stroke-color': '#ffffff',
+          'circle-color': '#ffffff', 
+          'circle-stroke-width': 5.5,
+          'circle-stroke-color': '#00008B',
           'circle-pitch-alignment': 'map'
         }
       });
@@ -153,7 +153,7 @@ export const Map = ({ lng, lat, zoom }) => {
         );
 
         // Add other controls
-        map.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
+        // map.current.addControl(new mapboxgl.FullscreenControl(), "top-left"); // Remove this line
         map.current.addControl(
           new mapboxgl.GeolocateControl({
             positionOptions: { enableHighAccuracy: true },
@@ -270,6 +270,7 @@ export const Map = ({ lng, lat, zoom }) => {
       <PropertyTiles 
         features={visibleFeatures} 
         focusedFeatureId={focusedFeatureId}
+        setFocusedFeatureId={setFocusedFeatureId}
       />
     </>
   );

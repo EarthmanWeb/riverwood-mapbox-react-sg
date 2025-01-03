@@ -67,9 +67,9 @@
 
 .property-tile.focused {
   border: 3px solid var(--riverwood-blue);
-  transform: scale(1.02);
-  animation: bounce 2s;
-  transition: all 0.3s ease;
+  transform: scale(1.06);
+  animation: bounce 1.8s;
+  transition: all 0.5s ease;
 }
 
 .property-tile img {

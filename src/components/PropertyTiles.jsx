@@ -4,7 +4,7 @@ import PropertyPopup from './PropertyPopup'; // Import the new component
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 
-export const PropertyTiles = ({ features, focusedFeatureId }) => {
+export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId }) => {
   const scrollContainerRef = useRef(null);
   const tileRefs = useRef({});
   const [selectedProperty, setSelectedProperty] = useState(null); // State to manage selected property
@@ -60,6 +60,7 @@ export const PropertyTiles = ({ features, focusedFeatureId }) => {
 
   const handleTileClick = (property) => {
     setSelectedProperty(property);
+    setFocusedFeatureId(property.id); // Add this line to set focus when clicking tile
   };
 
   const handleClosePopup = () => {
@@ -95,7 +96,15 @@ export const PropertyTiles = ({ features, focusedFeatureId }) => {
               ref={el => tileRefs.current[feature.properties.id] = el}
               onClick={() => handleTileClick(props)} // Add click handler
             >
-              <img src={props.image} alt={props.title} style={{ cursor: 'pointer' }} />
+              <img 
+                src={props.image} 
+                alt={props.title} 
+                style={{ cursor: 'pointer' }}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent double handling
+                  handleTileClick(props);
+                }}
+              />
               <h4>{props.title}</h4>
               <p className="address">{props.display_address}</p>
               <p className="price">{priceRange}</p>

@@ -19,6 +19,9 @@ html, body {
 .mapboxgl-ctrl-group {
   z-index: 2;
 }
+.mapboxgl-ctrl-top-left, .mapboxgl-ctrl-top-right  {
+  margin-top: 100px !important;
+}
 
 
 /* Home button */
