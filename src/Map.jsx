@@ -5,7 +5,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { MapContext } from "./App";
 import "./Map.css";
 
-import { useRef, useEffect, useContext } from "react";
+import { useRef, useEffect, useContext, useState } from "react";
 // import ReactDOM from "react-dom/client";
 import { useUpdateEffect } from "react-use";
 
@@ -17,11 +17,14 @@ mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
 
 import { MockDataService } from './services/MockDataService';
 import style from './styles/style.json';  // Update import to use style.json
+import { PropertyTiles } from './components/PropertyTiles';
 
 export const Map = ({ lng, lat, zoom }) => {
   const mapDiv = useRef(null);
   const map = useRef(null);
   const popup = useRef(null); // Add this line near the top with other refs
+  const [visibleFeatures, setVisibleFeatures] = useState([]);
+  const [focusedFeatureId, setFocusedFeatureId] = useState(null);
 
   // variables relating to map
   const {} = useContext(MapContext);
@@ -51,7 +54,7 @@ export const Map = ({ lng, lat, zoom }) => {
             10, 4,  // smaller at zoom level 10
             16, 8   // larger at zoom level 16
           ],
-          'circle-color': '#FF0000',
+          'circle-color': '#00008B', // Dark blue
           'circle-stroke-width': 1.5,
           'circle-stroke-color': '#ffffff',
           'circle-pitch-alignment': 'map'
@@ -66,34 +69,15 @@ export const Map = ({ lng, lat, zoom }) => {
   };
 
   const bindLayerEvents = () => {
-    // Remove existing listeners if any
     map.current.off('click', 'property-points');
     map.current.off('mouseenter', 'property-points');
     map.current.off('mouseleave', 'property-points');
 
-    // Add click handler
     map.current.on('click', 'property-points', (e) => {
       if (!e.features?.[0]) return;
-      
-      // Remove existing popup
-      if (popup.current) {
-        popup.current.remove();
-      }
-
-      const feature = e.features[0];
-      const props = feature.properties;
-      const coordinates = feature.geometry.coordinates.slice();
-
-      // Ensure proper popup positioning
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-
-      popup.current = new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(createPopupContent(props, coordinates))
-        .addTo(map.current);
-
+      const featureId = e.features[0].properties.id;
+      console.log('Clicked feature ID:', featureId);
+      setFocusedFeatureId(featureId);
     });
 
     // Mouse interactions
@@ -154,7 +138,10 @@ export const Map = ({ lng, lat, zoom }) => {
       center: [lng, lat],
       zoom: zoom,
       pitch: 0, // Force flat view
-      bearing: 0 // Force north orientation
+      bearing: 0, // Force north orientation
+      pitchWithRotate: false, // Disable pitch with rotate gesture
+      maxPitch: 0, // Prevent any pitch adjustment
+      minPitch: 0  // Prevent any pitch adjustment
     });
 
     // Single load event
@@ -179,26 +166,30 @@ export const Map = ({ lng, lat, zoom }) => {
         // Add layer and bind events
         addMapLayers();
         
+        // Update visible features after layer is added
+        updateVisibleFeatures();
+        
         // Add navigation control with zoom buttons first
         map.current.addControl(
           new mapboxgl.NavigationControl({
             showCompass: false, // Hide rotation control
             showZoom: true,     // Show zoom controls
-            visualizePitch: false
+            visualizePitch: false,
+            pitchWithRotate: false
           }),
           'top-right'
         );
 
         // Add other controls
-        map.current.addControl(new mapboxgl.FullscreenControl(), "bottom-left");
+        map.current.addControl(new mapboxgl.FullscreenControl(), "top-left");
         map.current.addControl(
           new mapboxgl.GeolocateControl({
             positionOptions: { enableHighAccuracy: true },
             trackUserLocation: true }
           ), 
-          "bottom-left"
+          "top-left"
         );
-        map.current.addControl(new HomeControl(), "bottom-left");
+        map.current.addControl(new HomeControl(), "top-left");
         
         // Home button functionality
         homeControlFunctionality(map.current, lng, lat, zoom);
@@ -257,5 +248,57 @@ export const Map = ({ lng, lat, zoom }) => {
   // run an effect (update function) only on updates of dependency array
   useUpdateEffect(update, []);
 
-  return <div ref={mapDiv} id="mapDiv"></div>;
+  const updateVisibleFeatures = () => {
+    if (!map.current || !map.current.getSource('properties')) return;
+    
+    const bounds = map.current.getBounds();
+    const features = map.current.queryRenderedFeatures({
+      layers: ['property-points']
+    }).filter(feature => {
+      const [lng, lat] = feature.geometry.coordinates;
+      return (
+        lng >= bounds.getWest() &&
+        lng <= bounds.getEast() &&
+        lat >= bounds.getSouth() &&
+        lat <= bounds.getNorth()
+      );
+    });
+    
+    setVisibleFeatures(features);
+  };
+
+  // Make sure to call updateVisibleFeatures after adding the layer
+  useEffect(() => {
+    if (!map.current) return;
+
+    // Add event listeners for map movement
+    const updateFeatures = () => {
+      // Only update if the layer exists
+      if (map.current.getLayer('property-points')) {
+        updateVisibleFeatures();
+      }
+    };
+
+    map.current.on('moveend', updateFeatures);
+    map.current.on('zoomend', updateFeatures);
+    map.current.on('render', updateFeatures); // Add this to catch initial load
+
+    return () => {
+      if (map.current) {
+        map.current.off('moveend', updateFeatures);
+        map.current.off('zoomend', updateFeatures);
+        map.current.off('render', updateFeatures);
+      }
+    };
+  }, []);
+
+  return (
+    <>
+      <div ref={mapDiv} id="mapDiv"></div>
+      <PropertyTiles 
+        features={visibleFeatures} 
+        focusedFeatureId={focusedFeatureId}
+      />
+    </>
+  );
 };

@@ -1,6 +1,7 @@
 import propertiesData from '../data/properties.json';
 
 export interface PropertyData {
+  id: string; // Add an ID field
   title: string;
   image: string;
   lat: string;
@@ -63,7 +64,10 @@ export class MockDataService {
 
   public async loadMockData(): Promise<PropertyData[]> {
     try {
-      this.mockData = propertiesData.properties;
+      this.mockData = propertiesData.properties.map((property, index) => ({
+        ...property,
+        id: property.id || `property-${index}` // Ensure each property has a unique ID
+      }));
       return this.mockData;
     } catch (error) {
       console.error('Error loading mock data:', error);
@@ -76,15 +80,14 @@ export class MockDataService {
       type: 'Feature',
       geometry: {
         type: 'Point',
-        // Ensure coordinates are numbers and in the correct order [lng, lat]
         coordinates: [Number(property.lng), Number(property.lat)]
       },
       properties: {
+        id: property.id, // Include the ID in the properties
         title: property.title,
         image: property.image,
         display_address: property.display_address,
         status: property.status,
-        // Only include the properties we need for the popup
         tenants: JSON.stringify(property.tenants),
         type: property.type
       }

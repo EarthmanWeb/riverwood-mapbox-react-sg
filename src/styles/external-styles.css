@@ -7,11 +7,16 @@
 }
 
 /* Site Header & Footer Backgrounds */
-.site-header,
+.site-header {
+  background: var(--riverwood-blue);
+  width: 100%;
+  flex-shrink: 0;
+}
 .site-footer {
   background: var(--riverwood-blue);
   width: 100%;
   flex-shrink: 0;
+  height: 30px;
 }
 
 /* Site Intro Styling */

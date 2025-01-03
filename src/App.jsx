@@ -14,9 +14,9 @@ function App() {
           <MapContainer MapContext={MapContext} />
         </div>
       </main>
-      <footer id="colophon" className="site-footer">
-        <div className="site-info">
-          <p className="app-footer__credit">© 2024 <a className="home-link" href="/">Riverwood Properties</a></p>
+      <footer id="colophon" className="site-footer p-0 m-0">
+        <div className="site-info p-0 m-0">
+          <p className="app-footer__credit p-0 m-0">© 2024 <a className="home-link" href="/">Riverwood Properties</a></p>
         </div>
       </footer>
     </div>
