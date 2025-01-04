@@ -1,20 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { FaEye, FaSearchMinus, FaSearch, FaTimes } from 'react-icons/fa';
 import { BiReset } from 'react-icons/bi';
 import { useSearchParams, useParams } from 'react-router-dom';
 import '../styles/components/FilterPanel.css';
 import { FilterService } from '../services/FilterService';
+import MultiSelect from './MultiSelect';
+import { MockDataService } from '../services/MockDataService';
 
 const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { slug } = useParams(); // Add this line
-  const [filters, setFilters] = useState({
-    keyword: searchParams.get('keyword') || '',
-    type: searchParams.getAll('type') || [],
-    status: searchParams.get('status') || '',
-    features: searchParams.getAll('features') || []
-  });
+
+  // Only read from URL
+  const filters = useMemo(() => {
+    const urlFilters = {
+      keyword: searchParams.get('keyword') || '',
+      type: searchParams.getAll('type') || [],
+      status: searchParams.get('status') || '',
+      features: searchParams.getAll('features') || [],
+      labels: searchParams.getAll('labels') || []
+    };
+    console.log('🔍 FilterPanel: Reading URL filters:', urlFilters);
+    return urlFilters;
+  }, [searchParams]);
+
+  const [propertyTypes, setPropertyTypes] = useState([]);
+  const [propertyLabels, setPropertyLabels] = useState([]);
   const [isClosing, setIsClosing] = useState(false);
+
+  // Load data and apply initial filters once
+  useEffect(() => {
+    const initializeData = async () => {
+      const mockDataService = MockDataService.getInstance();
+      if (mockDataService.getData().length === 0) {
+        await mockDataService.loadMockData();
+      }
+      setPropertyTypes(mockDataService.getUniquePropertyTypes());
+      setPropertyLabels(mockDataService.getUniquePropertyLabels());
+      
+      // Apply initial filters
+      onFiltersChange?.(FilterService.cleanFilters(filters));
+    };
+    initializeData();
+  }, []); // Run once on mount
+
+  // Simplified update that only changes URL
+  const updateFilters = useCallback((updates) => {
+    console.log('🔍 FilterPanel: UpdateFilters called:', {
+      current: Object.fromEntries([...searchParams.entries()]),
+      updates
+    });
+    
+    const newParams = new URLSearchParams(searchParams);
+    
+    Object.entries(updates).forEach(([key, value]) => {
+      newParams.delete(key);
+      if (Array.isArray(value)) {
+        value.forEach(v => v && newParams.append(key, v));
+      } else if (value) {
+        newParams.set(key, value);
+      }
+    });
+
+    console.log('🔍 FilterPanel: Setting URL params:', {
+      params: [...newParams.entries()]
+    });
+    
+    setSearchParams(newParams, { replace: true });
+  }, [searchParams, setSearchParams]);
+
+  const handleFilterChange = useCallback((type, value) => {
+    updateFilters({ [type]: value });
+  }, [updateFilters]);
 
   const handleClose = () => {
     setIsClosing(true);
@@ -24,67 +80,22 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
     }, 300); // Match transition duration
   };
 
-  // Update filters while preserving route
-  const updateFilters = (newFilters) => {
-    console.log('FilterPanel updateFilters:', {
-      before: filters,
-      new: newFilters,
-      cleaned: FilterService.cleanFilters(newFilters)
-    });
+  const handleReset = useCallback(() => {
+    setSearchParams(new URLSearchParams(), { replace: true });
+  }, [setSearchParams]);
 
-    const cleanFilters = FilterService.cleanFilters(newFilters);
-    
-    // Update URL parameters
-    setSearchParams(
-      Object.entries(cleanFilters).flatMap(([key, value]) => {
-        if (Array.isArray(value)) {
-          return value.map(v => [key, v]);
-        }
-        return [[key, value]];
-      }),
-      { replace: true }
-    );
-    
-    onFiltersChange?.(cleanFilters);
-  };
-
-  const handleReset = () => {
-    setFilters({
-      keyword: '',
-      type: [],
-      status: '',
-      features: []
-    });
-    updateFilters({});
-  };
-
-  const handleFilterChange = (type, value) => {
-    const newFilters = { ...filters, [type]: value };
-    setFilters(newFilters);
-    updateFilters(newFilters);
-  };
-
-  const handleClearKeyword = () => {
-    const newFilters = { ...filters, keyword: '' };
-    setFilters(newFilters);
-    updateFilters(newFilters);
-  };
+  const handleClearKeyword = useCallback(() => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('keyword');
+    setSearchParams(newParams, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   // Get current active filters
   const getActiveFilters = () => {
-    const filters = {};
-    if (filters.keyword) filters.keyword = filters.keyword;
-    return filters;
+    const activeFilters = {};
+    if (filters.keyword) activeFilters.keyword = filters.keyword;
+    return activeFilters;
   };
-
-  // Apply filters from URL whenever searchParams changes
-  useEffect(() => {
-    const urlKeyword = searchParams.get('keyword');
-    if (urlKeyword !== filters.keyword) {
-      setFilters({ ...filters, keyword: urlKeyword || '' });
-      onFiltersChange?.(getActiveFilters());
-    }
-  }, [searchParams]);
 
   const handleZoomOut = () => {
     if (window.mapInstance) {
@@ -99,10 +110,13 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
     return currentZoom > minZoom;
   };
 
-  const filteredFeatures = visibleFeatures.filter(feature => {
-    const searchText = `${feature.properties.title} ${feature.properties.description}`.toLowerCase();
-    return !filters.keyword || searchText.includes(filters.keyword.toLowerCase());
-  });
+  // Memoize filtered features
+  const filteredFeatures = useMemo(() => {
+    return visibleFeatures.filter(feature => {
+      const searchText = `${feature.properties.title} ${feature.properties.description}`.toLowerCase();
+      return !filters.keyword || searchText.includes(filters.keyword.toLowerCase());
+    });
+  }, [visibleFeatures, filters.keyword]);
 
   return (
     <>
@@ -164,8 +178,30 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
                   <FaTimes size={12} />
                 </button>
               </div>
-              {/* Additional filter controls will go here */}
-              <p className='text-muted'>More Filters coming soon...</p>
+              
+              <MultiSelect
+                options={propertyTypes}
+                selected={filters.type}
+                onChange={(value) => {
+                //   console.log('Type selection changed:', value);
+                  handleFilterChange('type', value);
+                }}
+                placeholder="Select property types..."
+                label="Property Type"
+              />
+
+              <MultiSelect
+                options={propertyLabels}
+                selected={filters.labels}
+                onChange={(value) => {
+                //   console.log('Label selection changed:', value);
+                  handleFilterChange('labels', value);
+                }}
+                placeholder="Select property labels..."
+                label="Property Labels"
+              />
+
+              {/* Additional filter controls */}
             </div>
           </div>
         </div>
@@ -174,4 +210,27 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
   );
 };
 
-export default FilterPanel;
+// Improved debounce with cancel
+function debounce(func, wait) {
+  let timeout;
+  
+  const debounced = function(...args) {
+    const later = () => {
+      timeout = null;
+      func.apply(this, args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+
+  debounced.cancel = function() {
+    clearTimeout(timeout);
+  };
+
+  return debounced;
+}
+
+export default React.memo(FilterPanel, (prev, next) => {
+  return prev.isOpen === next.isOpen && 
+         prev.visibleFeatures === next.visibleFeatures;
+});

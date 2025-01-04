@@ -6,7 +6,7 @@ import { Navbar } from "./components/Navbar";
 import { MapContainer } from "./MapContainer";
 
 function App() {
-  console.log('App rendering, current path:', window.location.pathname);
+  // console.log('App rendering, current path:', window.location.pathname);
   
   return (
     <div id="container" className="site-container">

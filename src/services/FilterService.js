@@ -1,78 +1,92 @@
 export class FilterService {
-  static filterFeatures(features, filters) {
-    console.log('FilterService.filterFeatures called with:', {
-      featureCount: features.length,
-      filters,
-      hasFilters: Object.keys(filters).length > 0
-    });
-
-    // If no filters are active, return all features
-    if (!Object.keys(filters).length) {
-      console.log('No active filters, returning all features');
-      return features;
-    }
-
-    const filtered = features.filter(feature => {
-      // Apply all active filters
-      return Object.entries(filters).every(([filterType, value]) => {
-        const result = this.applySingleFilter(filterType, value, feature);
-        console.log(`Filter ${filterType}:`, { value, passed: result });
-        return result;
-      });
-    });
-
-    console.log('Filtering complete:', {
-      inputCount: features.length,
-      outputCount: filtered.length,
-      activeFilters: Object.keys(filters)
-    });
-
-    return filtered;
-  }
-
-  static applySingleFilter(filterType, value, feature) {
-    switch (filterType) {
-      case 'keyword':
-        return this.applyKeywordFilter(feature, value);
-      case 'type':
-        return this.applyTypeFilter(feature, value);
-      case 'status':
-        return this.applyStatusFilter(feature, value);
-      case 'features':
-        return this.applyFeaturesFilter(feature, value);
-      default:
-        console.log('Unknown filter type:', filterType);
-        return true;
-    }
-  }
-
-  static applyKeywordFilter(feature, keyword) {
-    if (!keyword) return true;
-    const searchText = `${feature.properties.title} ${feature.properties.description}`.toLowerCase();
-    return searchText.includes(keyword.toLowerCase());
-  }
-
-  static applyTypeFilter(feature, types) {
-    if (!types?.length) return true;
-    return types.includes(feature.properties.type);
-  }
-
-  static applyStatusFilter(feature, status) {
-    if (!status) return true;
-    return feature.properties.status === status;
-  }
-
-  static applyFeaturesFilter(feature, features) {
-    if (!features?.length) return true;
-    return features.every(f => feature.properties.features.includes(f));
-  }
-
   static cleanFilters(filters) {
-    return Object.fromEntries(
-      Object.entries(filters).filter(([_, value]) => {
-        if (Array.isArray(value)) return value.length > 0;
+    console.log('🔍 FilterService: Cleaning filters:', {
+      input: filters,
+      isTypeArray: Array.isArray(filters.type)
+    });
+
+    // Start with known structure
+    const cleaned = {
+      keyword: filters.keyword || '',
+      type: Array.isArray(filters.type) ? filters.type : 
+            filters.type ? [filters.type] : [],
+      labels: Array.isArray(filters.labels) ? filters.labels :
+            filters.labels ? [filters.labels] : [],
+      features: Array.isArray(filters.features) ? filters.features :
+            filters.features ? [filters.features] : [],
+      status: filters.status || ''
+    };
+
+    // Remove empty values but preserve empty arrays
+    const result = Object.fromEntries(
+      Object.entries(cleaned).filter(([_, value]) => {
+        if (Array.isArray(value)) return true; // Keep all arrays
         return Boolean(value);
       })
     );
+
+    console.log('🔍 FilterService: Cleaned filters:', result);
+    return result;
+  }
+
+  static normalizeArrayValue(value) {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.filter(Boolean);
+    return [value].filter(Boolean);
+  }
+
+  static filterFeatures(features, filters) {
+    console.log('🔍 FilterService: Filtering features:', {
+      featureCount: features?.length,
+      filters,
+      filterKeys: Object.keys(filters)
+    });
+
+    if (!features?.length) return features;
+    
+    const cleanFilters = this.cleanFilters(filters);
+    if (!Object.keys(cleanFilters).length) return features;
+
+    return features.filter(feature => {
+      const keywordMatch = !cleanFilters.keyword || 
+        this.applyKeywordFilter(feature, cleanFilters.keyword);
+
+      const typeMatch = !cleanFilters.type?.length || 
+        cleanFilters.type.some(t => feature.properties.type === t);
+
+      const labelMatch = !cleanFilters.labels?.length ||
+        cleanFilters.labels.some(l => feature.properties.labels?.includes(l));
+
+      return keywordMatch && typeMatch && labelMatch;
+    });
+  }
+
+  static applyKeywordFilter(feature, keywords) {
+    if (!keywords) return true;
+    
+    const searchText = `${feature.properties.title} ${feature.properties.description}`.toLowerCase();
+    
+    const terms = [];
+    let remaining = keywords;
+    
+    const quotes = remaining.match(/"([^"]+)"/g) || [];
+    quotes.forEach(quote => {
+      terms.push(quote.slice(1, -1));
+      remaining = remaining.replace(quote, '');
+    });
+    
+    const individualTerms = remaining
+      .split(/\s+/)
+      .map(term => term.trim().toLowerCase())
+      .filter(term => term.length > 0);
+    
+    terms.push(...individualTerms);
+
+    return terms.every(term => {
+      if (term.includes(' ')) {
+        return searchText.includes(term.toLowerCase());
+      }
+      return searchText.includes(term.toLowerCase());
+    });
   }
 }

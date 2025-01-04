@@ -1,0 +1,100 @@
+.multi-select {
+  margin-bottom: 20px;
+}
+
+.multi-select-label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.multi-select-button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.multi-select-button.open {
+  border-color: #0275d8;
+}
+
+.multi-select-button .icon {
+  transition: transform 0.2s;
+}
+
+.multi-select-button .icon.open {
+  transform: rotate(180deg);
+}
+
+.multi-select-dropdown {
+  position: absolute;
+  width: calc(100% - 40px);
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-top: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+.multi-select-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.multi-select-option:hover {
+  background: #f8f9fa;
+}
+
+.multi-select-option input {
+  margin-right: 8px;
+}
+
+.selected-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.selected-token {
+  background: #e9ecef;
+  border-radius: 16px;
+  padding: 4px 8px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #495057;
+}
+
+.token-remove {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.token-remove:hover {
+  color: #dc3545;
+  background: rgba(0,0,0,0.05);
+}

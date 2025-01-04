@@ -53,6 +53,10 @@ export class MockDataService {
   private static instance: MockDataService;
   private mockData: PropertyData[] = [];
 
+  private cachedPropertyTypes: string[] | null = null;
+  private cachedPropertyLabels: string[] | null = null;
+  private dataLoaded = false;
+
   private constructor() {}
 
   public static getInstance(): MockDataService {
@@ -71,12 +75,19 @@ export class MockDataService {
   }
 
   public async loadMockData(): Promise<PropertyData[]> {
+    if (this.dataLoaded) {
+      return this.mockData;
+    }
+
     try {
       this.mockData = propertiesData.properties.map((property, index) => ({
         ...property,
         id: property.id || `property-${index}`,
-        slug: this.generateSlug(property.title)
+        slug: this.generateSlug(property.title),
+        // Ensure labels is always an array
+        labels: Array.isArray(property.labels) ? property.labels : []
       }));
+      this.dataLoaded = true;
       return this.mockData;
     } catch (error) {
       console.error('Error loading mock data:', error);
@@ -121,5 +132,53 @@ export class MockDataService {
 
   public getData(): PropertyData[] {
     return this.mockData;
+  }
+
+  public getUniquePropertyTypes(): string[] {
+    if (this.cachedPropertyTypes) {
+      return this.cachedPropertyTypes;
+    }
+
+    if (this.mockData.length === 0) {
+      console.warn('Attempting to get property types before data is loaded');
+      return [];
+    }
+
+    console.log('Getting unique property types:', {
+      dataLoaded: this.mockData.length,
+      types: new Set(this.mockData.map(property => property.type))
+    });
+    this.cachedPropertyTypes = Array.from(new Set(
+      this.mockData.map(property => property.type)
+    )).sort();
+    
+    return this.cachedPropertyTypes;
+  }
+
+  public getUniquePropertyLabels(): string[] {
+    if (this.cachedPropertyLabels) {
+      return this.cachedPropertyLabels;
+    }
+
+    if (this.mockData.length === 0) {
+      console.warn('Attempting to get property labels before data is loaded');
+      return [];
+    }
+
+    console.log('Getting unique property labels:', {
+      dataLoaded: this.mockData.length,
+      labels: new Set(this.mockData.flatMap(property => property.labels))
+    });
+    this.cachedPropertyLabels = Array.from(new Set(
+      this.mockData.flatMap(property => property.labels)
+    )).sort();
+    
+    return this.cachedPropertyLabels;
+  }
+
+  public getUniquePropertyFeatures(): string[] {
+    return Array.from(new Set(
+      this.mockData.flatMap(property => property.features)
+    )).sort();
   }
 }
