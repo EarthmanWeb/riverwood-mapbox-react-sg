@@ -1,3 +1,5 @@
+import { useNavigate, useParams } from 'react-router-dom';
+
 // Mapbox import
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -21,6 +23,8 @@ import { PropertyTiles } from './PropertyTiles';
 import PropertyPopup from '../components/PropertyPopup';
 
 export const Map = ({ lng, lat, zoom }) => {
+  const navigate = useNavigate();
+  const { slug } = useParams();
   const mapDiv = useRef(null);
   const map = useRef(null);
   const popup = useRef(null);
@@ -28,6 +32,7 @@ export const Map = ({ lng, lat, zoom }) => {
   const [visibleFeatures, setVisibleFeatures] = useState([]);
   const [focusedFeatureId, setFocusedFeatureId] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   // variables relating to map
   const {} = useContext(MapContext);
@@ -77,10 +82,11 @@ export const Map = ({ lng, lat, zoom }) => {
     // Add the handler to window with proper context
     const handlerId = `handlePropertyDetails_${feature.properties.id}`;
     window[handlerId] = () => {
-      console.log('Handler called for feature:', feature);  // Debug log
-      setFocusedFeatureId(feature.properties.id);
-      // Call setSelectedProperty directly instead of using window.openPropertyDetails
+      // Button click handler - updates URL and shows details
+      const slug = MockDataService.getInstance().generateSlug(feature.properties.title);
+      navigate(`/${slug}`);
       setSelectedProperty(feature.properties);
+      setFocusedFeatureId(feature.properties.id);
     };
 
     popup.current = new mapboxgl.Popup({ 
@@ -127,7 +133,7 @@ export const Map = ({ lng, lat, zoom }) => {
     map.current.off('mouseenter', 'property-points');
     map.current.off('mouseleave', 'property-points');
 
-    // Click handler - removed persistence
+    // Restore original click behavior - just focuses the marker
     map.current.on('click', 'property-points', (e) => {
       if (!e.features?.[0]) return;
       const featureId = e.features[0].properties.id;
@@ -189,6 +195,7 @@ export const Map = ({ lng, lat, zoom }) => {
       try {
         const mockDataService = MockDataService.getInstance();
         await mockDataService.loadMockData();
+        setDataLoaded(true); // Set data loaded flag
         const geoJsonProperties = mockDataService.getGeoJsonFeatures();
 
         // Preload images
@@ -278,6 +285,28 @@ export const Map = ({ lng, lat, zoom }) => {
     };
   }, []);
 
+  // Move slug handling to a separate effect that depends on dataLoaded
+  useEffect(() => {
+    if (!dataLoaded || !slug || !map.current) return;
+
+    console.log('Attempting to find property for slug after data load:', slug);
+    const mockDataService = MockDataService.getInstance();
+    const property = mockDataService.findPropertyBySlug(slug);
+    
+    if (property) {
+      console.log('Found property after data load:', property);
+      setSelectedProperty(property);
+      setFocusedFeatureId(property.id);
+
+      // Remove zoom parameter entirely to maintain current zoom level
+      map.current.flyTo({
+        center: [Number(property.lng), Number(property.lat)],
+        essential: true,
+        duration: 2000  // Add smooth animation duration
+      });
+    }
+  }, [dataLoaded, slug]);
+
   const update = () => {
     // If layer exists delete layer
     // if (map.current.getLayer()) {
@@ -346,6 +375,22 @@ export const Map = ({ lng, lat, zoom }) => {
     };
   }, []);
 
+  // Add debug logs to property selection
+  const handlePropertySelect = (property) => {
+    const mockDataService = MockDataService.getInstance();
+    const slug = mockDataService.generateSlug(property.title);
+    console.log('Property selected:', { property, slug });
+    navigate(`/${slug}`); // Remove /properties/ prefix
+    setSelectedProperty(property);
+    setFocusedFeatureId(property.id);
+  };
+
+  // Update popup close handler
+  const handlePopupClose = () => {
+    setSelectedProperty(null);
+    navigate('/');
+  };
+
   return (
     <>
       <div ref={mapDiv} id="mapDiv"></div>
@@ -353,11 +398,12 @@ export const Map = ({ lng, lat, zoom }) => {
         features={visibleFeatures} 
         focusedFeatureId={focusedFeatureId}
         setFocusedFeatureId={setFocusedFeatureId}
+        onPropertySelect={handlePropertySelect}
       />
       {selectedProperty && (
         <PropertyPopup 
           property={selectedProperty} 
-          onClose={() => setSelectedProperty(null)}
+          onClose={handlePopupClose}
         />
       )}
     </>

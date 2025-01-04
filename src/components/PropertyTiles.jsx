@@ -5,7 +5,7 @@ import PropertyPopup from './PropertyPopup'; // Import the new component
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 
-export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId }) => {
+export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId, onPropertySelect }) => {
   const scrollContainerRef = useRef(null);
   const tileRefs = useRef({});
   const [selectedProperty, setSelectedProperty] = useState(null); // State to manage selected property
@@ -61,8 +61,7 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId 
   };
 
   const handleTileClick = (property) => {
-    setSelectedProperty(property);
-    setFocusedFeatureId(property.id); // Add this line to set focus when clicking tile
+    onPropertySelect(property);
   };
 
   const handleClosePopup = () => {

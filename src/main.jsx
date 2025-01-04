@@ -6,7 +6,7 @@ import './styles/external-styles.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.PROD ? '/properties' : '/'}>
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>,

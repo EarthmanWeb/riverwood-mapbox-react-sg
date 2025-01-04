@@ -62,17 +62,46 @@ export class MockDataService {
     return MockDataService.instance;
   }
 
+  private generateSlug(title: string): string {
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    return slug;
+  }
+
   public async loadMockData(): Promise<PropertyData[]> {
     try {
       this.mockData = propertiesData.properties.map((property, index) => ({
         ...property,
-        id: property.id || `property-${index}` // Ensure each property has a unique ID
+        id: property.id || `property-${index}`,
+        slug: this.generateSlug(property.title)
       }));
       return this.mockData;
     } catch (error) {
       console.error('Error loading mock data:', error);
       return [];
     }
+  }
+
+  public findPropertyBySlug(slug: string): PropertyData | undefined {
+    // Add early return if data isn't loaded
+    if (this.mockData.length === 0) {
+      console.warn('Attempting to find property before data is loaded');
+      return undefined;
+    }
+
+    const property = this.mockData.find(
+      property => this.generateSlug(property.title) === slug
+    );
+    
+    console.log('Property lookup result:', {
+      slug,
+      found: !!property,
+      title: property?.title
+    });
+    
+    return property;
   }
 
   public getGeoJsonFeatures(): GeoJsonFeature[] {
