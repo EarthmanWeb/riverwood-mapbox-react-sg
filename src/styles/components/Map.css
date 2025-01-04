@@ -49,3 +49,11 @@
   z-index: 1;
   margin-top: 4px;
 }
+
+.filter-button.active {
+  box-shadow: 0 0 0 2px #dc3545;
+}
+
+.filter-button.active svg {
+  color: #dc3545;
+}

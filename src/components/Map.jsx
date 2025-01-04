@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaFilter } from 'react-icons/fa';
 import FilterPanel from './FilterPanel';
+import { useSearchParams } from 'react-router-dom';
 
 // Mapbox import
 import mapboxgl from "mapbox-gl";
@@ -23,6 +24,7 @@ import { MockDataService } from '../services/MockDataService';
 import style from '../styles/style.json';  // Update import to use style.json
 import { PropertyTiles } from './PropertyTiles';
 import PropertyPopup from '../components/PropertyPopup';
+import { FilterService } from '../services/FilterService';
 
 export const Map = ({ lng, lat, zoom }) => {
   const navigate = useNavigate();
@@ -36,6 +38,10 @@ export const Map = ({ lng, lat, zoom }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [activeFilters, setActiveFilters] = useState({});
+  const [filteredFeatures, setFilteredFeatures] = useState([]); // Add this line
+  const [allFeatures, setAllFeatures] = useState([]); // Add this line to store all features
 
   // variables relating to map
   const {} = useContext(MapContext);
@@ -198,8 +204,9 @@ export const Map = ({ lng, lat, zoom }) => {
       try {
         const mockDataService = MockDataService.getInstance();
         await mockDataService.loadMockData();
-        setDataLoaded(true); // Set data loaded flag
         const geoJsonProperties = mockDataService.getGeoJsonFeatures();
+        setAllFeatures(geoJsonProperties); // Store all features
+        setDataLoaded(true); // Set data loaded flag
 
         // Preload images
         preloadImages(geoJsonProperties);
@@ -323,13 +330,12 @@ export const Map = ({ lng, lat, zoom }) => {
   // run an effect (update function) only on updates of dependency array
   useUpdateEffect(update, []);
 
+  // Separate bounds checking from filtering
   const updateVisibleFeatures = () => {
-    if (!map.current || !map.current.getSource('properties')) return;
+    if (!map.current || !allFeatures.length) return;
     
     const bounds = map.current.getBounds();
-    const features = map.current.queryRenderedFeatures({
-      layers: ['property-points']
-    }).filter(feature => {
+    const features = allFeatures.filter(feature => {
       const [lng, lat] = feature.geometry.coordinates;
       return (
         lng >= bounds.getWest() &&
@@ -342,30 +348,41 @@ export const Map = ({ lng, lat, zoom }) => {
     setVisibleFeatures(features);
   };
 
-  // Make sure to call updateVisibleFeatures after adding the layer
+  // Update filtered features when either bounds or filters change
   useEffect(() => {
-    if (!map.current) return;
+    const filtered = FilterService.filterFeatures(visibleFeatures, activeFilters);
+    
+    if (map.current?.getSource('properties')) {
+      map.current.getSource('properties').setData({
+        type: 'FeatureCollection',
+        features: filtered
+      });
+    }
+    
+    setFilteredFeatures(filtered);
+  }, [visibleFeatures, activeFilters]);
 
-    // Add event listeners for map movement
-    const updateFeatures = () => {
-      // Only update if the layer exists
-      if (map.current.getLayer('property-points')) {
-        updateVisibleFeatures();
-      }
+  // Update visible features on map movement
+  useEffect(() => {
+    if (!map.current || !allFeatures.length) return;
+
+    const handleMapMove = () => {
+      updateVisibleFeatures();
     };
 
-    map.current.on('moveend', updateFeatures);
-    map.current.on('zoomend', updateFeatures);
-    map.current.on('render', updateFeatures); // Add this to catch initial load
+    map.current.on('moveend', handleMapMove);
+    map.current.on('zoomend', handleMapMove);
+
+    // Initial update
+    updateVisibleFeatures();
 
     return () => {
       if (map.current) {
-        map.current.off('moveend', updateFeatures);
-        map.current.off('zoomend', updateFeatures);
-        map.current.off('render', updateFeatures);
+        map.current.off('moveend', handleMapMove);
+        map.current.off('zoomend', handleMapMove);
       }
     };
-  }, []);
+  }, [allFeatures]); // Only depends on allFeatures
 
   useEffect(() => {
     // Global handler for opening property details
@@ -382,23 +399,107 @@ export const Map = ({ lng, lat, zoom }) => {
   const handlePropertySelect = (property) => {
     const mockDataService = MockDataService.getInstance();
     const slug = mockDataService.generateSlug(property.title);
-    console.log('Property selected:', { property, slug });
-    navigate(`/${slug}`); // Remove /properties/ prefix
+    
+    // Preserve existing search params when navigating
+    const currentParams = Object.fromEntries(searchParams.entries());
+    const queryString = new URLSearchParams(currentParams).toString();
+    
+    navigate(`/${slug}${queryString ? '?' + queryString : ''}`);
     setSelectedProperty(property);
     setFocusedFeatureId(property.id);
   };
 
-  // Update popup close handler
+  // Update popup close handler to preserve filters
   const handlePopupClose = () => {
     setSelectedProperty(null);
-    navigate('/');
+    // Preserve existing search params when closing
+    const currentParams = Object.fromEntries(searchParams.entries());
+    const queryString = new URLSearchParams(currentParams).toString();
+    navigate(queryString ? '/?' + queryString : '/');
   };
+
+  // Handle filter changes
+  const handleFiltersChange = (filters) => {
+    setActiveFilters(filters);
+  };
+
+  // Filter visible features based on active filters
+  const getFilteredFeatures = () => {
+    // If no filters are active, return all visible features
+    if (!Object.keys(activeFilters).length) {
+      return visibleFeatures;
+    }
+    return FilterService.filterFeatures(visibleFeatures, activeFilters);
+  };
+
+  // Update filtered features and map when dependencies change
+  useEffect(() => {
+    console.log('Updating filtered features:', {
+      visibleCount: visibleFeatures.length,
+      filters: activeFilters
+    });
+
+    const filtered = getFilteredFeatures();
+    setFilteredFeatures(filtered);
+
+    // Only update map source if it exists and data has changed
+    if (map.current?.getSource('properties')) {
+      const source = map.current.getSource('properties');
+      const currentData = source.serialize().data;
+      const newData = {
+        type: 'FeatureCollection',
+        features: filtered
+      };
+
+      // Only update if data has actually changed
+      if (JSON.stringify(currentData) !== JSON.stringify(newData)) {
+        source.setData(newData);
+      }
+    }
+  }, [visibleFeatures, activeFilters]); // Only run when these dependencies change
+
+  // Apply filters from URL on mount
+  useEffect(() => {
+    const filters = {};
+    for (const [key, value] of searchParams.entries()) {
+      filters[key] = value;
+    }
+    setActiveFilters(filters);
+  }, []);
+
+  // Apply both filters and slug on mount/update
+  useEffect(() => {
+    if (!dataLoaded) return;
+
+    // Handle property detail if slug exists
+    if (slug) {
+      const mockDataService = MockDataService.getInstance();
+      const property = mockDataService.findPropertyBySlug(slug);
+      
+      if (property) {
+        setSelectedProperty(property);
+        setFocusedFeatureId(property.id);
+        map.current?.flyTo({
+          center: [Number(property.lng), Number(property.lat)],
+          essential: true,
+          duration: 2000
+        });
+      }
+    }
+
+    // Apply filters from URL
+    const filters = {};
+    for (const [key, value] of searchParams.entries()) {
+      filters[key] = value;
+    }
+    setActiveFilters(filters);
+  }, [dataLoaded, slug, searchParams]);
 
   return (
     <>
       <div ref={mapDiv} id="mapDiv"></div>
       <button 
-        className="filter-button" 
+        className={`filter-button ${Object.keys(activeFilters).length > 0 ? 'active' : ''}`}
         onClick={() => setIsFilterOpen(true)}
       >
         <FaFilter />
@@ -407,9 +508,11 @@ export const Map = ({ lng, lat, zoom }) => {
       <FilterPanel 
         isOpen={isFilterOpen} 
         onClose={() => setIsFilterOpen(false)}
+        visibleFeatures={filteredFeatures}
+        onFiltersChange={handleFiltersChange}
       />
       <PropertyTiles 
-        features={visibleFeatures} 
+        features={filteredFeatures}
         focusedFeatureId={focusedFeatureId}
         setFocusedFeatureId={setFocusedFeatureId}
         onPropertySelect={handlePropertySelect}

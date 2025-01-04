@@ -121,14 +121,14 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId,
           const isFocused = feature.properties.id === focusedFeatureId;
           let priceRange = 'Contact for Pricing';
           
-          try {
-            const tenants = JSON.parse(props.tenants);
-            if (tenants?.length) {
-              const prices = tenants.map(t => t.price);
+          // Remove JSON.parse since tenants is already an array of objects
+          if (props.tenants?.length) {
+            const prices = props.tenants
+              .filter(t => t.price) // Filter out any tenants without prices
+              .map(t => t.price);
+            if (prices.length > 0) {
               priceRange = `$${Math.min(...prices).toLocaleString()} - $${Math.max(...prices).toLocaleString()}`;
             }
-          } catch (error) {
-            console.error('Error parsing tenants:', error);
           }
 
           return (
