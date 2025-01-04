@@ -1,4 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { FaFilter } from 'react-icons/fa';
+import FilterPanel from './FilterPanel';
 
 // Mapbox import
 import mapboxgl from "mapbox-gl";
@@ -33,6 +35,7 @@ export const Map = ({ lng, lat, zoom }) => {
   const [focusedFeatureId, setFocusedFeatureId] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // variables relating to map
   const {} = useContext(MapContext);
@@ -216,17 +219,6 @@ export const Map = ({ lng, lat, zoom }) => {
         // Update visible features after layer is added
         updateVisibleFeatures();
         
-        // Add navigation control with zoom buttons first
-        map.current.addControl(
-          new mapboxgl.NavigationControl({
-            showCompass: false, // Hide rotation control
-            showZoom: true,     // Show zoom controls
-            visualizePitch: false,
-            pitchWithRotate: false
-          }),
-          'top-right'
-        );
-
         // Add other controls
         // map.current.addControl(new mapboxgl.FullscreenControl(), "top-left"); // Remove this line
         map.current.addControl(
@@ -237,6 +229,17 @@ export const Map = ({ lng, lat, zoom }) => {
           "top-left"
         );
         map.current.addControl(new HomeControl(), "top-left");
+        
+        // Add navigation control with zoom buttons after home control
+        map.current.addControl(
+          new mapboxgl.NavigationControl({
+            showCompass: false, // Hide rotation control
+            showZoom: true,     // Show zoom controls
+            visualizePitch: false,
+            pitchWithRotate: false
+          }),
+          'top-left'
+        );
         
         // Home button functionality
         homeControlFunctionality(map.current, lng, lat, zoom);
@@ -394,6 +397,17 @@ export const Map = ({ lng, lat, zoom }) => {
   return (
     <>
       <div ref={mapDiv} id="mapDiv"></div>
+      <button 
+        className="filter-button" 
+        onClick={() => setIsFilterOpen(true)}
+      >
+        <FaFilter />
+        <span className="filter-button-text">Filter Results</span>
+      </button>
+      <FilterPanel 
+        isOpen={isFilterOpen} 
+        onClose={() => setIsFilterOpen(false)}
+      />
       <PropertyTiles 
         features={visibleFeatures} 
         focusedFeatureId={focusedFeatureId}
