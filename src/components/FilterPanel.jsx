@@ -19,13 +19,14 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
       features: searchParams.getAll('features') || [],
       labels: searchParams.getAll('labels') || []
     };
-    console.log('🔍 FilterPanel: Reading URL filters:', urlFilters);
+    // console.log('🔍 FilterPanel: Reading URL filters:', urlFilters);
     return urlFilters;
   }, [searchParams]);
 
   const [propertyTypes, setPropertyTypes] = useState([]);
   const [propertyLabels, setPropertyLabels] = useState([]);
   const [isClosing, setIsClosing] = useState(false);
+  const [allFeatures, setAllFeatures] = useState([]);
 
   // Load data and apply initial filters once
   useEffect(() => {
@@ -36,6 +37,7 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
       }
       setPropertyTypes(mockDataService.getUniquePropertyTypes());
       setPropertyLabels(mockDataService.getUniquePropertyLabels());
+      setAllFeatures(mockDataService.getGeoJsonFeatures());
       
       // Apply initial filters
       onFiltersChange?.(FilterService.cleanFilters(filters));
@@ -45,10 +47,10 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
 
   // Simplified update that only changes URL
   const updateFilters = useCallback((updates) => {
-    console.log('🔍 FilterPanel: UpdateFilters called:', {
-      current: Object.fromEntries([...searchParams.entries()]),
-      updates
-    });
+    // console.log('🔍 FilterPanel: UpdateFilters called:', {
+    //   current: Object.fromEntries([...searchParams.entries()]),
+    //   updates
+    // });
     
     const newParams = new URLSearchParams(searchParams);
     
@@ -61,9 +63,9 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
       }
     });
 
-    console.log('🔍 FilterPanel: Setting URL params:', {
-      params: [...newParams.entries()]
-    });
+    // console.log('🔍 FilterPanel: Setting URL params:', {
+    //   params: [...newParams.entries()]
+    // });
     
     setSearchParams(newParams, { replace: true });
   }, [searchParams, setSearchParams]);
@@ -112,11 +114,50 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
 
   // Memoize filtered features
   const filteredFeatures = useMemo(() => {
-    return visibleFeatures.filter(feature => {
-      const searchText = `${feature.properties.title} ${feature.properties.description}`.toLowerCase();
-      return !filters.keyword || searchText.includes(filters.keyword.toLowerCase());
-    });
-  }, [visibleFeatures, filters.keyword]);
+    const results = FilterService.getFilteredResults(
+      visibleFeatures, 
+      FilterService.cleanFilters(filters)
+    );
+    
+    // console.log('🎯 Filtered features result:', {
+    //   totalVisible: visibleFeatures?.length,
+    //   totalAll: allFeatures?.length,
+    //   filtered: results?.length,
+    //   activeFilters: Object.keys(filters).filter(k => 
+    //     filters[k] && (!Array.isArray(filters[k]) || filters[k].length)
+    //   )
+    // });
+    
+    return results;
+  }, [visibleFeatures, filters]);
+
+  // Add helper function to calculate counts
+  const getOptionsWithCounts = useCallback((options, type) => {
+    // console.log('🔍 Getting options with counts:', {
+    //   type,
+    //   optionsCount: options.length,
+    //   currentFilters: filters,
+    //   allFeaturesCount: allFeatures?.length,
+    //   visibleFeaturesCount: visibleFeatures?.length
+    // });
+
+    const optionsWithCounts = FilterService.getOptionsWithCount(
+      allFeatures, // Use full dataset for counts
+      type,
+      options,
+      FilterService.cleanFilters(filters)
+    );
+
+    // console.log('🔍 Options with counts result:', {
+    //   type,
+    //   results: optionsWithCounts.map(o => ({ 
+    //     label: o.label, 
+    //     count: o.count 
+    //   }))
+    // });
+
+    return optionsWithCounts;
+  }, [allFeatures, filters]);
 
   return (
     <>
@@ -180,25 +221,25 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
               </div>
               
               <MultiSelect
-                options={propertyTypes}
+                options={getOptionsWithCounts(propertyTypes, 'type')}
                 selected={filters.type}
                 onChange={(value) => {
                 //   console.log('Type selection changed:', value);
                   handleFilterChange('type', value);
                 }}
                 placeholder="Select property types..."
-                label="Property Type"
+                label="Type"
               />
 
               <MultiSelect
-                options={propertyLabels}
+                options={getOptionsWithCounts(propertyLabels, 'labels')}
                 selected={filters.labels}
                 onChange={(value) => {
                 //   console.log('Label selection changed:', value);
                   handleFilterChange('labels', value);
                 }}
                 placeholder="Select property labels..."
-                label="Property Labels"
+                label="Labels"
               />
 
               {/* Additional filter controls */}

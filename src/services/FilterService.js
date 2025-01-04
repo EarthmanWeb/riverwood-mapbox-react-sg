@@ -1,9 +1,9 @@
 export class FilterService {
   static cleanFilters(filters) {
-    console.log('🔍 FilterService: Cleaning filters:', {
-      input: filters,
-      isTypeArray: Array.isArray(filters.type)
-    });
+    // console.log('🔍 FilterService: Cleaning filters:', {
+    //   input: filters,
+    //   isTypeArray: Array.isArray(filters.type)
+    // });
 
     // Start with known structure
     const cleaned = {
@@ -25,7 +25,7 @@ export class FilterService {
       })
     );
 
-    console.log('🔍 FilterService: Cleaned filters:', result);
+    // console.log('🔍 FilterService: Cleaned filters:', result);
     return result;
   }
 
@@ -35,12 +35,34 @@ export class FilterService {
     return [value].filter(Boolean);
   }
 
+  static countMatchesForTerm(features, filterType, term, currentFilters) {
+    const filtersExceptCurrentType = { ...currentFilters };
+    delete filtersExceptCurrentType[filterType];
+
+    // First filter by other types only
+    const filteredByOtherTypes = this.filterFeatures(features, filtersExceptCurrentType);
+    
+    // Then count matches for this term
+    return filteredByOtherTypes.filter(feature => {
+      switch (filterType) {
+        case 'type':
+          return feature.properties.type === term;
+        case 'labels':
+          return feature.properties.labels?.includes(term);
+        case 'features':
+          return feature.properties.features?.includes(term);
+        default:
+          return false;
+      }
+    }).length;
+  }
+
   static filterFeatures(features, filters) {
-    console.log('🔍 FilterService: Filtering features:', {
-      featureCount: features?.length,
-      filters,
-      filterKeys: Object.keys(filters)
-    });
+    // console.log('🔍 FilterService: Filtering features:', {
+    //   featureCount: features?.length,
+    //   filters,
+    //   filterKeys: Object.keys(filters)
+    // });
 
     if (!features?.length) return features;
     
@@ -57,7 +79,10 @@ export class FilterService {
       const labelMatch = !cleanFilters.labels?.length ||
         cleanFilters.labels.some(l => feature.properties.labels?.includes(l));
 
-      return keywordMatch && typeMatch && labelMatch;
+      const featureMatch = !cleanFilters.features?.length ||
+        cleanFilters.features.some(f => feature.properties.features?.includes(f));
+
+      return keywordMatch && typeMatch && labelMatch && featureMatch;
     });
   }
 
@@ -87,6 +112,56 @@ export class FilterService {
         return searchText.includes(term.toLowerCase());
       }
       return searchText.includes(term.toLowerCase());
+    });
+  }
+
+  static getFilteredResults(features, filters) {
+    console.log('🎯 Getting filtered results:', { 
+      featureCount: features?.length, 
+      filters 
+    });
+    return this.filterFeatures(features, filters);
+  }
+
+  static getOptionsWithCount(features, filterType, options, currentFilters) {
+    // Remove current filter type selections from counting
+    const filtersForCounting = { ...currentFilters };
+    delete filtersForCounting[filterType];
+
+    console.log('📊 Counting matches for options:', {
+      filterType,
+      optionsCount: options.length,
+      currentFilters,
+      filtersForCounting,
+      featureCount: features?.length
+    });
+
+    // First filter by other active filters
+    const filteredByOthers = this.filterFeatures(features, filtersForCounting);
+    
+    console.log('📊 Features after other filters:', {
+      filterType,
+      remainingCount: filteredByOthers.length
+    });
+
+    // Count matches for each option
+    return options.map(option => {
+      const count = filteredByOthers.filter(feature => {
+        switch (filterType) {
+          case 'type':
+            return feature.properties.type === option;
+          case 'labels':
+            return feature.properties.labels?.includes(option);
+          default:
+            return false;
+        }
+      }).length;
+
+      return {
+        label: option,
+        value: option,
+        count
+      };
     });
   }
 }

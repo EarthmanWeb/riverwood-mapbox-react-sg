@@ -11,7 +11,7 @@
 
 .multi-select-button {
   width: 100%;
-  padding: 10px 12px;
+  padding: 4px 8px; /* Reduce padding */
   border: 1px solid #ddd;
   border-radius: 4px;
   background: white;
@@ -21,6 +21,7 @@
   cursor: pointer;
   font-size: 14px;
   color: #333;
+  min-height: 38px; /* Add minimum height */
 }
 
 .multi-select-button.open {
@@ -35,11 +36,22 @@
   transform: rotate(180deg);
 }
 
+.multi-select-button .selected-tokens {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0; /* Remove margin */
+  min-height: 24px; /* Ensure minimum height for empty state */
+  align-items: center;
+}
+
+.multi-select-button .placeholder {
+  color: #666;
+}
+
 .multi-select-dropdown {
-  position: absolute;
-  width: calc(100% - 40px);
-  max-height: 200px;
-  overflow-y: auto;
+  width: 100%;
   background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -54,6 +66,36 @@
   padding: 8px 12px;
   cursor: pointer;
   font-size: 14px;
+  justify-content: space-between;
+}
+
+.multi-select-option.text-muted {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.multi-select-option.text-muted input {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+}
+
+.option-count {
+  color: #6c757d;
+  font-size: 12px;
+  background: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.option-count.text-muted {
+  background: #f8f9fa;
+  color: #adb5bd;
 }
 
 .multi-select-option:hover {
@@ -62,13 +104,6 @@
 
 .multi-select-option input {
   margin-right: 8px;
-}
-
-.selected-tokens {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
 }
 
 .selected-token {
@@ -80,6 +115,7 @@
   align-items: center;
   gap: 4px;
   color: #495057;
+  margin: 2px 0; /* Add vertical margin for wrapping */
 }
 
 .token-remove {

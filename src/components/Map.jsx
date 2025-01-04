@@ -423,10 +423,10 @@ export const Map = ({ lng, lat, zoom }) => {
     const filters = {};
     const entries = [...searchParams.entries()];
     
-    console.log('🔍 Map: Processing URL params:', {
-      entries,
-      currentFilters: activeFilters
-    });
+    // console.log('🔍 Map: Processing URL params:', {
+    //   entries,
+    //   currentFilters: activeFilters
+    // });
     
     // Group entries by parameter name
     entries.forEach(([key, value]) => {
@@ -438,7 +438,7 @@ export const Map = ({ lng, lat, zoom }) => {
       }
     });
 
-    console.log('🔍 Map: Setting filters:', filters);
+    // console.log('🔍 Map: Setting filters:', filters);
     setActiveFilters(filters);
   }, [searchParams]); // Only depend on searchParams
 
@@ -446,10 +446,10 @@ export const Map = ({ lng, lat, zoom }) => {
   useEffect(() => {
     if (!visibleFeatures?.length) return;
 
-    console.log('🔍 Map: Applying filters to features:', {
-      visibleCount: visibleFeatures.length,
-      filters: activeFilters
-    });
+    // console.log('🔍 Map: Applying filters to features:', {
+    //   visibleCount: visibleFeatures.length,
+    //   filters: activeFilters
+    // });
 
     const filtered = FilterService.filterFeatures(visibleFeatures, activeFilters);
     
