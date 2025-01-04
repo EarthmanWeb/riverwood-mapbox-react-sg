@@ -10,6 +10,8 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId,
   const tileRefs = useRef({});
   const [selectedProperty, setSelectedProperty] = useState(null); // State to manage selected property
   const popupRef = useRef(null);  // Add this ref for popup management
+  const containerRef = useRef(null);
+  const isMobile = window.innerWidth <= 768;
 
   // Effect to scroll to focused feature
   useEffect(() => {
@@ -108,6 +110,14 @@ export const PropertyTiles = ({ features, focusedFeatureId, setFocusedFeatureId,
       }
     }
   };
+
+  useEffect(() => {
+    // Update container position when filter panel opens/closes
+    const mapContainer = document.querySelector('.map-container');
+    if (containerRef.current && !isMobile) {
+      containerRef.current.style.right = mapContainer?.classList.contains('panel-open') ? '350px' : '0';
+    }
+  }, [isMobile]);
 
   return (
     <ErrorBoundary>

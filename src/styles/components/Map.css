@@ -57,3 +57,10 @@
 .filter-button.active svg {
   color: #dc3545;
 }
+
+.map-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  transition: width 0.3s ease-out;
+}

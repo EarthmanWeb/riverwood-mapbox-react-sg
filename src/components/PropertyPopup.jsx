@@ -21,8 +21,8 @@ const PropertyPopup = ({ property, onClose }) => {
 
   return (
     <div className="property-popup-overlay" onClick={handleOverlayClick}>
+      <button className="close-button" onClick={onClose}>×</button>
       <div className="property-popup">
-        <button className="close-button" onClick={onClose}>×</button>
         <div className="property-popup-content">
           <div className="property-popup-header">
             <h2>{property.title}

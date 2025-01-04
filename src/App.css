@@ -13,6 +13,7 @@ html, body {
   width: 100%;
   position: relative;
   z-index: 1;
+  transition: width 0.3s ease-out;
 }
 
 /* Ensure map controls stay above imported styles */

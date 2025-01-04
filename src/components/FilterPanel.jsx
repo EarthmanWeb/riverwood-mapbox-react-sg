@@ -1,14 +1,39 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { FaEye, FaSearchMinus, FaSearch, FaTimes } from 'react-icons/fa';
-import { BiReset } from 'react-icons/bi';
-import { useSearchParams, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { FaMapMarkedAlt, FaArrowRight } from 'react-icons/fa'; // Remove duplicate imports
+import { useSearchParams } from 'react-router-dom';
 import '../styles/components/FilterPanel.css';
 import { FilterService } from '../services/FilterService';
-import MultiSelect from './MultiSelect';
 import { MockDataService } from '../services/MockDataService';
+import FilterContent from './FilterContent';
 
 const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const isMobile = window.innerWidth <= 768;
+
+  useEffect(() => {
+    // Toggle body class for global styling
+    document.body.classList.toggle('panel-open', isOpen);
+    
+    // Handle map resize when panel opens/closes on desktop
+    if (!isMobile) {
+      const mapContainer = document.querySelector('.map-container');
+      if (mapContainer) {
+        mapContainer.classList.toggle('panel-open', isOpen);
+        // Trigger map resize after transition
+        setTimeout(() => {
+          if (window.mapInstance) {
+            window.mapInstance.resize();
+          }
+        }, 300);
+      }
+    }
+
+    // Cleanup
+    return () => {
+      document.body.classList.remove('panel-open');
+    };
+  }, [isOpen, isMobile]);
 
   // Only read from URL
   const filters = useMemo(() => {
@@ -161,90 +186,55 @@ const FilterPanel = ({ isOpen, onClose, visibleFeatures = [], onFiltersChange })
 
   return (
     <>
-      {isOpen && (
+      {/* Mobile panel */}
+      {isMobile && isOpen && (
         <div className={`filter-overlay ${isClosing ? 'fading-out' : ''}`} onClick={handleClose}>
           <div className={`filter-panel ${isClosing ? 'sliding-out' : ''}`} onClick={e => e.stopPropagation()}>
             <div className="filter-title mt-0 pt-3">
-              <h2 className="mt-0 pt-0">Property Filters</h2>
+              <h2>Property Filters</h2>
               <button className="view-results-button" onClick={handleClose}>
-                <FaEye />
-                <span>View Results</span>
+                <FaMapMarkedAlt />
+                <span>View on Map</span>
               </button>
             </div>
-            <div className="filter-header">
-              <div className="filter-header-left">
-                <div className="results-count">
-                  {filteredFeatures.length > 0 ? (
-                    <>
-                      {`${filteredFeatures.length} `}
-                      {Object.keys(filters).some(key => filters[key] && (!Array.isArray(filters[key]) || filters[key].length > 0)) ? (
-                        <><span className="highlight px-1">filtered</span> result(s) in visible area</>
-                      ) : (
-                        'results in visible area'
-                      )}
-                    </>
-                  ) : canZoomOut() ? (
-                    <button className="zoom-out-link" onClick={handleZoomOut}>
-                      <FaSearchMinus />
-                      <span>Zoom out to find more</span>
-                    </button>
-                  ) : (
-                    'No results in visible area'
-                  )}
-                </div>
-              </div>
-              <button 
-                className={`reset-button ${Object.keys(filters).some(key => filters[key] && (!Array.isArray(filters[key]) || filters[key].length > 0)) ? 'active' : ''}`} 
-                onClick={handleReset}
-              >
-                <BiReset />
-                <span>Remove Filters</span>
-              </button>
-            </div>
-            <div className="filter-content">
-              <div className="search-container">
-                <FaSearch className="search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search by keyword..."
-                  value={filters.keyword}
-                  onChange={(e) => handleFilterChange('keyword', e.target.value)}
-                  className="search-input"
-                />
-                <button 
-                  className={`search-clear ${filters.keyword ? 'visible' : ''}`}
-                  onClick={handleClearKeyword}
-                  aria-label="Clear search"
-                >
-                  <FaTimes size={12} />
-                </button>
-              </div>
-              
-              <MultiSelect
-                options={getOptionsWithCounts(propertyTypes, 'type')}
-                selected={filters.type}
-                onChange={(value) => {
-                //   console.log('Type selection changed:', value);
-                  handleFilterChange('type', value);
-                }}
-                placeholder="Select property types..."
-                label="Type"
-              />
-
-              <MultiSelect
-                options={getOptionsWithCounts(propertyLabels, 'labels')}
-                selected={filters.labels}
-                onChange={(value) => {
-                //   console.log('Label selection changed:', value);
-                  handleFilterChange('labels', value);
-                }}
-                placeholder="Select property labels..."
-                label="Labels"
-              />
-
-              {/* Additional filter controls */}
-            </div>
+            <FilterContent 
+              filters={filters}
+              filteredFeatures={filteredFeatures}
+              propertyTypes={propertyTypes}
+              propertyLabels={propertyLabels}
+              handleFilterChange={handleFilterChange}
+              handleClearKeyword={handleClearKeyword}
+              handleZoomOut={handleZoomOut}
+              canZoomOut={canZoomOut}
+              handleReset={handleReset}
+              getOptionsWithCounts={getOptionsWithCounts}
+            />
           </div>
+        </div>
+      )}
+      
+      {/* Desktop panel */}
+      {!isMobile && (
+        <div className={`filter-panel ${isOpen ? 'open' : ''}`}>
+          <div className="filter-title mt-0 pt-3">
+            <h2>Property Filters</h2>
+            <button className="view-results-button" onClick={handleClose}>
+              <FaArrowRight />
+              <span>Hide Filters</span>
+            </button>
+          </div>
+          <FilterContent 
+            filters={filters}
+            filteredFeatures={filteredFeatures}
+            propertyTypes={propertyTypes}
+            propertyLabels={propertyLabels}
+            handleFilterChange={handleFilterChange}
+            handleClearKeyword={handleClearKeyword}
+            handleZoomOut={handleZoomOut}
+            canZoomOut={canZoomOut}
+            handleReset={handleReset}
+            getOptionsWithCounts={getOptionsWithCounts}
+          />
         </div>
       )}
     </>
@@ -270,6 +260,12 @@ function debounce(func, wait) {
 
   return debounced;
 }
+FilterPanel.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  visibleFeatures: PropTypes.array,
+  onFiltersChange: PropTypes.func
+};
 
 export default React.memo(FilterPanel, (prev, next) => {
   return prev.isOpen === next.isOpen && 

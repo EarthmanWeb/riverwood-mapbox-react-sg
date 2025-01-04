@@ -17,6 +17,7 @@
   width: 100%;
   flex-shrink: 0;
   height: 30px;
+  z-index: 1;
 }
 
 /* Site Intro Styling */

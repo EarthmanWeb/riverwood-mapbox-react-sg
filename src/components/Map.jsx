@@ -471,7 +471,7 @@ export const Map = ({ lng, lat, zoom }) => {
         onClick={() => setIsFilterOpen(true)}
       >
         <FaFilter />
-        <span className="filter-button-text">Filter Results</span>
+        <span className="filter-button-text">Show Filters</span>
       </button>
       <FilterPanel 
         isOpen={isFilterOpen} 

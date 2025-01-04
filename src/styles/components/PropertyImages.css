@@ -2,6 +2,7 @@
   flex: 1;
   display: flex;
   overflow-x: scroll; /* changed from auto */
+  justify-content: flex-start;
   gap: 10px;
   padding: 10px;
   -webkit-overflow-scrolling: touch;

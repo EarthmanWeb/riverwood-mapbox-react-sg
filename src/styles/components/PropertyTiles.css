@@ -14,10 +14,19 @@
   /* backdrop-filter: blur(5px); */
   cursor: grab;
   user-select: none;
-  z-index: 1000; /* Ensure tiles float above map */
+  z-index: 1002; /* Increase z-index to float above filter panel */
   pointer-events: auto; /* Ensure tiles are interactive */
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  transition: right 0.3s ease-out; /* Add transition for smooth width change */
+}
+
+/* Add media query for desktop with filter panel */
+@media (min-width: 769px) {
+  body.panel-open .property-tiles-container {
+    right: 350px;
+    z-index: 3;
+  }
 }
 
 /* Webkit scrollbar styling (Chrome, Safari, Edge) */
